@@ -1,0 +1,96 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.267091907517598 -0.013592846279402694 0.9635751903554987 3.2396013096204492
+  position 18.390230178863558 4.448115027766826 10.76241511542698
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Solid {
+  translation 0 5.69 1.83
+  children [
+    Shape {
+      geometry Box {
+        size 20 0.2 4
+      }
+    }
+  ]
+}
+Solid {
+  translation 0 2.75 0
+  children [
+    Shape {
+      geometry Box {
+        size 20 2 0.2
+      }
+    }
+  ]
+  name "solid(1)"
+}
+Solid {
+  translation 0 0 1.83
+  children [
+    Shape {
+      geometry Box {
+        size 20 0.2 4
+      }
+    }
+  ]
+  name "solid(2)"
+}
+DEF RobotLimpiador Robot {
+  translation 0 0.88 0
+  children [
+    DEF motor_rueda_FR HingeJoint {
+      jointParameters HingeJointParameters {
+      }
+      device [
+        RotationalMotor {
+        }
+      ]
+      endPoint Solid {
+        translation -0.4 0.3 -0.25
+        children [
+          Shape {
+            geometry DEF Rueda_FR Cylinder {
+              height 0.15
+              radius 0.3
+            }
+          }
+        ]
+        name "solid(1)"
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+      }
+      device [
+        DEF motor_rueda_FL RotationalMotor {
+        }
+      ]
+      endPoint DEF Rueda_FL Solid {
+        translation 0.4 0.3 -0.25
+        children [
+          Shape {
+            geometry Cylinder {
+              height 0.15
+              radius 0.3
+            }
+          }
+        ]
+      }
+    }
+    Shape {
+      geometry Box {
+        size 1.2 0.4 0.8
+      }
+    }
+  ]
+}
