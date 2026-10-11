@@ -6,5 +6,8 @@
 __pycache__/
 *.py[cod]
 
-# Temporary test files
+# Temporary test and export files
 .write_test
+webots_animation_export/
+ARCHIVOS_WEBOTS_CLOUD_ANIMACION/
+worlds/.*.wbproj
