@@ -1,0 +1,10 @@
+# Blender backup files
+*.blend1
+*.blend2
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Temporary test files
+.write_test
