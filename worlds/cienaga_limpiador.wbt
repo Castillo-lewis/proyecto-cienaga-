@@ -1,0 +1,395 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "../protos/RobotLimpiadorCienaga.proto"
+
+WorldInfo {
+  info [
+    "Robot Autonomo Limpiador de Basura - Cienaga, Magdalena"
+    "Simulacion con traccion diferencial de 4 ruedas, brazo de 4 DOF y camara superior."
+    "Entorno urbano de Cienaga con casas coloniales caribenas, mural conmemorativo y costa."
+  ]
+  title "Robot Limpiador Cienaga"
+  basicTimeStep 16
+  coordinateSystem "ENU"
+  defaultDamping Damping {
+    linear 0.2
+    angular 0.4
+  }
+  contactProperties [
+    ContactProperties {
+      material1 "default"
+      material2 "default"
+      coulombFriction [
+        1.2
+      ]
+      bounce 0.1
+      softCFM 0.0001
+      softERP 0.6
+    }
+  ]
+}
+
+Viewpoint {
+  orientation 0.26 0.24 0.93 2.15
+  position 4.2 -4.8 2.6
+  near 0.1
+  far 500
+  follow "Robot_Limpiador_Cienaga"
+  followType "Tracking Shot"
+}
+
+TexturedBackground {}
+TexturedBackgroundLight {}
+
+DirectionalLight {
+  ambientIntensity 0.3
+  direction 0.65 0.35 -0.68
+  intensity 1.4
+  castShadows TRUE
+}
+
+# -------------------------------------------------------------
+# SUELO FISICO (CALLE Y ANDENES)
+# -------------------------------------------------------------
+Solid {
+  name "suelo_calle_asfalto"
+  translation 14 0 -0.04
+  boundingObject Box {
+    size 52 8.2 0.08
+  }
+  contactMaterial "default"
+}
+
+Solid {
+  name "anden_norte_fisico"
+  translation 14 5.35 0.08
+  boundingObject Box {
+    size 52 2.4 0.16
+  }
+  contactMaterial "default"
+}
+
+Solid {
+  name "anden_sur_fisico"
+  translation 14 -5.35 0.08
+  boundingObject Box {
+    size 52 2.4 0.16
+  }
+  contactMaterial "default"
+}
+
+Solid {
+  name "bordillo_norte_fisico"
+  translation 14 4.18 0.12
+  boundingObject Box {
+    size 52 0.18 0.24
+  }
+  contactMaterial "default"
+}
+
+Solid {
+  name "bordillo_sur_fisico"
+  translation 14 -4.18 0.12
+  boundingObject Box {
+    size 52 0.18 0.24
+  }
+  contactMaterial "default"
+}
+
+# -------------------------------------------------------------
+# MALLAS VISUALES DE ENTORNO (CIENAGA, MAGDALENA)
+# -------------------------------------------------------------
+Solid {
+  name "entorno_calle_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_calle.obj" ]
+    }
+  ]
+}
+
+Solid {
+  name "entorno_casas_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_casas.obj" ]
+    }
+  ]
+}
+
+Solid {
+  name "entorno_flora_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_flora.obj" ]
+    }
+  ]
+}
+
+Solid {
+  name "entorno_postes_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_postes.obj" ]
+    }
+  ]
+}
+
+Solid {
+  name "entorno_mural_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_mural.obj" ]
+    }
+  ]
+  boundingObject Transform {
+    translation 4.8 -8.55 1.85
+    children [
+      Box {
+        size 0.3 7.5 3.7
+      }
+    ]
+  }
+}
+
+Solid {
+  name "entorno_costa_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_costa.obj" ]
+    }
+  ]
+}
+
+# -------------------------------------------------------------
+# RESIDUOS Y BASURAS (OBJETOS DINAMICOS PARA RECOGER)
+# -------------------------------------------------------------
+Solid {
+  name "botella_plastica_1"
+  translation 1.55 0.22 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_botella.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.22
+    radius 0.035
+  }
+  physics Physics {
+    density -1
+    mass 0.08
+  }
+}
+
+Solid {
+  name "botella_plastica_2"
+  translation 2.4 -0.85 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_botella.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.22
+    radius 0.035
+  }
+  physics Physics {
+    density -1
+    mass 0.08
+  }
+}
+
+Solid {
+  name "botella_plastica_3"
+  translation 3.6 1.4 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_botella.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.22
+    radius 0.035
+  }
+  physics Physics {
+    density -1
+    mass 0.08
+  }
+}
+
+Solid {
+  name "lata_1"
+  translation 1.95 -0.35 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_lata.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.12
+    radius 0.033
+  }
+  physics Physics {
+    density -1
+    mass 0.05
+  }
+}
+
+Solid {
+  name "lata_2"
+  translation 4.1 0.6 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_lata.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.12
+    radius 0.033
+  }
+  physics Physics {
+    density -1
+    mass 0.05
+  }
+}
+
+Solid {
+  name "papel_arrugado_1"
+  translation 1.35 -0.15 0.04
+  children [
+    CadShape {
+      url [ "meshes/basura_papel.obj" ]
+    }
+  ]
+  boundingObject Sphere {
+    radius 0.055
+  }
+  physics Physics {
+    density -1
+    mass 0.03
+  }
+}
+
+Solid {
+  name "papel_arrugado_2"
+  translation 2.8 0.9 0.04
+  children [
+    CadShape {
+      url [ "meshes/basura_papel.obj" ]
+    }
+  ]
+  boundingObject Sphere {
+    radius 0.055
+  }
+  physics Physics {
+    density -1
+    mass 0.03
+  }
+}
+
+Solid {
+  name "bolsa_basura_1"
+  translation -2.2 3.55 0.16
+  children [
+    CadShape {
+      url [ "meshes/basura_bolsa.obj" ]
+    }
+  ]
+  boundingObject Sphere {
+    radius 0.22
+  }
+  physics Physics {
+    density -1
+    mass 0.4
+  }
+}
+
+Solid {
+  name "caja_carton_1"
+  translation 0.9 1.55 0.03
+  children [
+    CadShape {
+      url [ "meshes/basura_caja.obj" ]
+    }
+  ]
+  boundingObject Box {
+    size 0.38 0.28 0.04
+  }
+  physics Physics {
+    density -1
+    mass 0.25
+  }
+}
+
+Solid {
+  name "botella_anden"
+  translation 2.1 4.6 0.18
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_botella.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.22
+    radius 0.035
+  }
+  physics Physics {
+    density -1
+    mass 0.08
+  }
+}
+
+Solid {
+  name "lata_anden"
+  translation 5.4 4.5 0.18
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_lata.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.12
+    radius 0.033
+  }
+  physics Physics {
+    density -1
+    mass 0.05
+  }
+}
+
+Solid {
+  name "papel_anden"
+  translation 6.8 -4.5 0.18
+  children [
+    CadShape {
+      url [ "meshes/basura_papel.obj" ]
+    }
+  ]
+  boundingObject Sphere {
+    radius 0.055
+  }
+  physics Physics {
+    density -1
+    mass 0.03
+  }
+}
+
+# -------------------------------------------------------------
+# ROBOT LIMPIADOR DE CIENAGA
+# -------------------------------------------------------------
+RobotLimpiadorCienaga {
+  translation 0 0 0
+  rotation 0 0 1 0
+  name "Robot_Limpiador_Cienaga"
+  controller "robot_limpiador_controller"
+}

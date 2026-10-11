@@ -1,0 +1,484 @@
+#VRML_SIM R2025a utf8
+# license: Copyright (c) 2026. All rights reserved.
+# tags: hidden
+
+PROTO RobotLimpiadorCienaga [
+  field SFVec3f    translation         0 0 0
+  field SFRotation rotation            0 0 1 0
+  field SFString   name                "Robot_Limpiador_Cienaga"
+  field SFString   controller          "robot_limpiador_controller"
+  field MFString   controllerArgs      []
+  field SFString   customData          ""
+  field SFBool     supervisor          FALSE
+  field SFBool     synchronization     TRUE
+]
+{
+  Robot {
+    translation IS translation
+    rotation IS rotation
+    name IS name
+    controller IS controller
+    controllerArgs IS controllerArgs
+    customData IS customData
+    supervisor IS supervisor
+    synchronization IS synchronization
+    children [
+      # Visual Chassis with all accessories
+      CadShape {
+        url [ "meshes/chasis.obj" ]
+      }
+
+      # Mast Camera (Color, 640x480)
+      Camera {
+        translation -0.06 0 1.15
+        rotation 0 1 0 0.18
+        name "camara_superior"
+        fieldOfView 1.15
+        width 640
+        height 480
+      }
+
+      # Front Distance Sensor (IR)
+      DistanceSensor {
+        translation 0.74 0 0.36
+        rotation 0 0 1 0
+        name "ds_frontal"
+        lookupTable [
+          0 0 0
+          2 2000 0
+        ]
+        type "infra-red"
+      }
+
+      # Left Ultrasonic Sensor
+      DistanceSensor {
+        translation 0.73 0.12 0.30
+        rotation 0 0 1 0.35
+        name "ds_izquierdo"
+        lookupTable [
+          0 0 0
+          3 3000 0
+        ]
+        type "sonar"
+      }
+
+      # Right Ultrasonic Sensor
+      DistanceSensor {
+        translation 0.73 -0.12 0.30
+        rotation 0 0 1 -0.35
+        name "ds_derecho"
+        lookupTable [
+          0 0 0
+          3 3000 0
+        ]
+        type "sonar"
+      }
+
+      # IMU & GPS
+      InertialUnit {
+        name "imu"
+      }
+      GPS {
+        name "gps"
+      }
+
+      # 1. Front Left Wheel (DI)
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 1 0
+          anchor 0.36 0.35 0.16
+          suspensionSpringConstant 100000
+          suspensionDampingConstant 4000
+        }
+        device [
+          RotationalMotor {
+            name "motor_rueda_DI"
+            maxVelocity 15
+            maxTorque 80
+          }
+          PositionSensor {
+            name "sensor_rueda_DI"
+          }
+        ]
+        endPoint Solid {
+          translation 0.36 0.35 0.16
+          children [
+            CadShape {
+              url [ "meshes/rueda.obj" ]
+            }
+          ]
+          name "rueda_delantera_izquierda"
+          boundingObject Transform {
+            rotation 1 0 0 1.57079632679
+            children [
+              Cylinder {
+                height 0.095
+                radius 0.16
+              }
+            ]
+          }
+          physics Physics {
+            density -1
+            mass 3.5
+          }
+        }
+      }
+
+      # 2. Front Right Wheel (DD)
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 1 0
+          anchor 0.36 -0.35 0.16
+          suspensionSpringConstant 100000
+          suspensionDampingConstant 4000
+        }
+        device [
+          RotationalMotor {
+            name "motor_rueda_DD"
+            maxVelocity 15
+            maxTorque 80
+          }
+          PositionSensor {
+            name "sensor_rueda_DD"
+          }
+        ]
+        endPoint Solid {
+          translation 0.36 -0.35 0.16
+          children [
+            CadShape {
+              url [ "meshes/rueda.obj" ]
+            }
+          ]
+          name "rueda_delantera_derecha"
+          boundingObject Transform {
+            rotation 1 0 0 1.57079632679
+            children [
+              Cylinder {
+                height 0.095
+                radius 0.16
+              }
+            ]
+          }
+          physics Physics {
+            density -1
+            mass 3.5
+          }
+        }
+      }
+
+      # 3. Rear Left Wheel (TI)
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 1 0
+          anchor -0.36 0.35 0.16
+          suspensionSpringConstant 100000
+          suspensionDampingConstant 4000
+        }
+        device [
+          RotationalMotor {
+            name "motor_rueda_TI"
+            maxVelocity 15
+            maxTorque 80
+          }
+          PositionSensor {
+            name "sensor_rueda_TI"
+          }
+        ]
+        endPoint Solid {
+          translation -0.36 0.35 0.16
+          children [
+            CadShape {
+              url [ "meshes/rueda.obj" ]
+            }
+          ]
+          name "rueda_trasera_izquierda"
+          boundingObject Transform {
+            rotation 1 0 0 1.57079632679
+            children [
+              Cylinder {
+                height 0.095
+                radius 0.16
+              }
+            ]
+          }
+          physics Physics {
+            density -1
+            mass 3.5
+          }
+        }
+      }
+
+      # 4. Rear Right Wheel (TD)
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 1 0
+          anchor -0.36 -0.35 0.16
+          suspensionSpringConstant 100000
+          suspensionDampingConstant 4000
+        }
+        device [
+          RotationalMotor {
+            name "motor_rueda_TD"
+            maxVelocity 15
+            maxTorque 80
+          }
+          PositionSensor {
+            name "sensor_rueda_TD"
+          }
+        ]
+        endPoint Solid {
+          translation -0.36 -0.35 0.16
+          children [
+            CadShape {
+              url [ "meshes/rueda.obj" ]
+            }
+          ]
+          name "rueda_trasera_derecha"
+          boundingObject Transform {
+            rotation 1 0 0 1.57079632679
+            children [
+              Cylinder {
+                height 0.095
+                radius 0.16
+              }
+            ]
+          }
+          physics Physics {
+            density -1
+            mass 3.5
+          }
+        }
+      }
+
+      # Robotic Arm - Joint 1: Base Yaw
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 1
+          anchor 0.65 0 0.34
+        }
+        device [
+          RotationalMotor {
+            name "motor_brazo_yaw"
+            minPosition -2.5
+            maxPosition 2.5
+            maxVelocity 1.5
+            maxTorque 35
+          }
+          PositionSensor {
+            name "sensor_brazo_yaw"
+          }
+        ]
+        endPoint Solid {
+          translation 0.65 0 0.34
+          children [
+            CadShape {
+              url [ "meshes/brazo_base.obj" ]
+            }
+
+            # Arm - Joint 2: Shoulder Pitch
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                anchor 0 0 0.102
+              }
+              device [
+                RotationalMotor {
+                  name "motor_brazo_hombro"
+                  minPosition -1.2
+                  maxPosition 1.5
+                  maxVelocity 1.5
+                  maxTorque 50
+                }
+                PositionSensor {
+                  name "sensor_brazo_hombro"
+                }
+              ]
+              endPoint Solid {
+                translation 0 0 0.102
+                children [
+                  CadShape {
+                    url [ "meshes/brazo_seg1.obj" ]
+                  }
+
+                  # Arm - Joint 3: Elbow Pitch
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0 1 0
+                      anchor 0.42 0 0
+                    }
+                    device [
+                      RotationalMotor {
+                        name "motor_brazo_codo"
+                        minPosition -2.2
+                        maxPosition 1.6
+                        maxVelocity 1.8
+                        maxTorque 40
+                      }
+                      PositionSensor {
+                        name "sensor_brazo_codo"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.42 0 0
+                      children [
+                        CadShape {
+                          url [ "meshes/brazo_seg2.obj" ]
+                        }
+
+                        # Wrist & Gripper
+                        Solid {
+                          translation 0.38 0 0
+                          children [
+                            CadShape {
+                              url [ "meshes/gripper_base.obj" ]
+                            }
+
+                            # Left Gripper Finger
+                            HingeJoint {
+                              jointParameters HingeJointParameters {
+                                axis 0 0 1
+                                anchor 0.04 0.027 0
+                              }
+                              device [
+                                RotationalMotor {
+                                  name "motor_pinza_izq"
+                                  minPosition -0.3
+                                  maxPosition 0.3
+                                  maxVelocity 1.0
+                                  maxTorque 15
+                                }
+                                PositionSensor {
+                                  name "sensor_pinza_izq"
+                                }
+                              ]
+                              endPoint Solid {
+                                translation 0.04 0.027 0
+                                children [
+                                  CadShape {
+                                    url [ "meshes/gripper_finger_left.obj" ]
+                                  }
+                                ]
+                                name "pinza_izquierda"
+                                boundingObject Transform {
+                                  translation 0.076 0 0
+                                  children [
+                                    Box { size 0.17 0.032 0.05 }
+                                  ]
+                                }
+                                physics Physics {
+                                  density -1
+                                  mass 0.2
+                                }
+                              }
+                            }
+
+                            # Right Gripper Finger
+                            HingeJoint {
+                              jointParameters HingeJointParameters {
+                                axis 0 0 1
+                                anchor 0.04 -0.027 0
+                              }
+                              device [
+                                RotationalMotor {
+                                  name "motor_pinza_der"
+                                  minPosition -0.3
+                                  maxPosition 0.3
+                                  maxVelocity 1.0
+                                  maxTorque 15
+                                }
+                                PositionSensor {
+                                  name "sensor_pinza_der"
+                                }
+                              ]
+                              endPoint Solid {
+                                translation 0.04 -0.027 0
+                                children [
+                                  CadShape {
+                                    url [ "meshes/gripper_finger_right.obj" ]
+                                  }
+                                ]
+                                name "pinza_derecha"
+                                boundingObject Transform {
+                                  translation 0.076 0 0
+                                  children [
+                                    Box { size 0.17 0.032 0.05 }
+                                  ]
+                                }
+                                physics Physics {
+                                  density -1
+                                  mass 0.2
+                                }
+                              }
+                            }
+                          ]
+                          name "muneca_pinza"
+                          boundingObject Box { size 0.05 0.06 0.06 }
+                          physics Physics {
+                            density -1
+                            mass 0.3
+                          }
+                        }
+                      ]
+                      name "brazo_segmento_2"
+                      boundingObject Transform {
+                        translation 0.19 0 0
+                        children [
+                          Box { size 0.38 0.075 0.07 }
+                        ]
+                      }
+                      physics Physics {
+                        density -1
+                        mass 1.2
+                      }
+                    }
+                  }
+                ]
+                name "brazo_segmento_1"
+                boundingObject Transform {
+                  translation 0.21 0 0
+                  children [
+                    Box { size 0.42 0.085 0.085 }
+                  ]
+                }
+                physics Physics {
+                  density -1
+                  mass 1.8
+                }
+              }
+            }
+          ]
+          name "brazo_base"
+          boundingObject Cylinder {
+            height 0.12
+            radius 0.055
+          }
+          physics Physics {
+            density -1
+            mass 2.0
+          }
+        }
+      }
+    ]
+    boundingObject Group {
+      children [
+        Transform {
+          translation 0 0 0.28
+          children [
+            Box { size 1.20 0.78 0.38 }
+          ]
+        }
+        Transform {
+          translation -0.18 0 0.72
+          children [
+            Box { size 0.62 0.70 0.48 }
+          ]
+        }
+      ]
+    }
+    physics Physics {
+      density -1
+      mass 85.0
+      centerOfMass [ 0 0 0.22 ]
+    }
+  }
+}
