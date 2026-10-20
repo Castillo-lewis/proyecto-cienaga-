@@ -98,6 +98,28 @@ El mundo virtual reproduce los elementos característicos de Ciénaga:
 
 ---
 
+## 📊 Gestión del Proyecto, Fases y Entregables (Project Roadmap)
+
+Este proyecto se estructura en 5 fases de ingeniería mecatrónica y robótica autónoma:
+
+| Fase | Hito / Componente | Descripción Técnica | Estado |
+|---|---|---|---|
+| **Fase 1: CAD & Modelado 3D** | Diseño paramétrico en Blender 5.2 | Chasis (1.20×0.78×0.38m), 4 ruedas motrices (r=0.16m), tolva de residuos (0.62×0.70×0.48m), brazo de 4 GDL y pinza paralela. Mallas de Ciénaga (12 casas, mural, palmeras, postes y 13 residuos). | ✅ **Completado** |
+| **Fase 2: Simulación y Físicas** | Webots R2025a & PROTO | Creación del nodo `RobotLimpiadorCienaga.proto` con juntas `HingeJoint`, amortiguadores, fricción coulombiana de 1.2, cámara mástil (640×480), sensor IR frontal y ultrasonidos laterales. | ✅ **Completado** |
+| **Fase 3: Control y Automatización** | Controlador en Python | Teleoperación por teclado con suavizado cinemático y máquina de estados autónoma para patrullaje, detección de basura y rutina de depósito en tolva. | ✅ **Completado** |
+| **Fase 4: Despliegue en la Nube** | Webots.cloud & Docker | Empaquetado con `webots.yaml`, contenedor Docker, generación de `scene.x3d`, `animation.json` y miniatura oficial. | ✅ **Completado** |
+| **Fase 5: Visión Artificial & IA** | Detección inteligente de residuos | Integración de modelo YOLOv8 para segmentación y clasificación en tiempo real de botellas, latas y residuos plásticos mediante la cámara superior. | 🔄 **En Desarrollo** |
+| **Fase 6: Navegación Autónoma** | SLAM y Planificación de Rutas | Integración de sensor Lidar para mapeo 2D/3D del municipio de Ciénaga y algoritmos de cobertura completa (Coverage Path Planning). | 📋 **Planificado** |
+
+---
+
+### 🎯 Enlaces de Seguimiento en GitHub
+* 📌 **Hitos del Proyecto (Milestones)**: [Ver Hitos y Entregables](https://github.com/Castillo-lewis/proyecto-cienaga-/milestones)
+* 📋 **Tareas y Trazabilidad (Issues)**: [Ver Listado de Tareas](https://github.com/Castillo-lewis/proyecto-cienaga-/issues)
+* 📊 **Tablero de Proyecto (Projects)**: [Ver Tablero Kanban](https://github.com/Castillo-lewis/proyecto-cienaga-/projects)
+
+---
+
 ## 💻 Ejecución Local
 
 1. Clona el repositorio:
