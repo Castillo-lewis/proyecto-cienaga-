@@ -6,11 +6,11 @@ EXTERNPROTO "../protos/RobotLimpiadorCienaga.proto"
 
 WorldInfo {
   info [
-    "Robot Autonomo Limpiador de Basura - Cienaga, Magdalena"
+    "Robot Autonomo Limpiador de Basura - Plaza del Centenario (Cienaga, Magdalena)"
     "Simulacion con traccion diferencial de 4 ruedas, brazo de 4 DOF y camara superior."
-    "Entorno urbano de Cienaga con casas coloniales caribenas, mural conmemorativo y costa."
+    "Entorno: Plaza del Centenario, El Templete neoclasico, Iglesia colonial San Juan Bautista y Sierra Nevada."
   ]
-  title "Robot Limpiador Cienaga"
+  title "Plaza del Centenario - Robot Limpiador Cienaga"
   basicTimeStep 16
   coordinateSystem "ENU"
   defaultDamping Damping {
@@ -32,8 +32,8 @@ WorldInfo {
 }
 
 Viewpoint {
-  orientation 0.26 0.24 0.93 2.15
-  position 4.2 -4.8 2.6
+  orientation 0.28 0.25 0.93 2.15
+  position -4.5 0 14.5
   near 0.1
   far 500
   follow "Robot_Limpiador_Cienaga"
@@ -44,77 +44,104 @@ TexturedBackground {}
 TexturedBackgroundLight {}
 
 DirectionalLight {
-  ambientIntensity 0.3
+  ambientIntensity 0.35
   direction 0.65 0.35 -0.68
-  intensity 1.4
+  intensity 1.6
   castShadows TRUE
 }
 
 # -------------------------------------------------------------
-# SUELO FISICO (CALLE Y ANDENES)
+# SUELO FISICO DE LA PLAZA DEL CENTENARIO Y COLISIONES
 # -------------------------------------------------------------
 Solid {
-  name "suelo_calle_asfalto"
-  translation 14 0 -0.04
+  name "suelo_plaza_principal"
+  translation 20 0 -0.04
   boundingObject Box {
-    size 52 8.2 0.08
+    size 56 46 0.08
   }
   contactMaterial "default"
 }
 
+# Base física del Templete central
 Solid {
-  name "anden_norte_fisico"
-  translation 14 5.35 0.08
-  boundingObject Box {
-    size 52 2.4 0.16
+  name "templete_colision_base"
+  translation 16 0 0.30
+  boundingObject Cylinder {
+    height 0.60
+    radius 4.2
   }
   contactMaterial "default"
 }
 
+# Muros físicos de la Iglesia San Juan Bautista
 Solid {
-  name "anden_sur_fisico"
-  translation 14 -5.35 0.08
+  name "iglesia_colision_muro"
+  translation 51 3 5.0
   boundingObject Box {
-    size 52 2.4 0.16
+    size 28 14 10
   }
   contactMaterial "default"
 }
 
+# Torre campanario colisión
 Solid {
-  name "bordillo_norte_fisico"
-  translation 14 4.18 0.12
+  name "iglesia_torre_colision"
+  translation 39.2 -4.2 12.0
   boundingObject Box {
-    size 52 0.18 0.24
+    size 6 6 24
   }
   contactMaterial "default"
 }
 
+# Muros perimetrales invisibles para seguridad del robot
 Solid {
-  name "bordillo_sur_fisico"
-  translation 14 -4.18 0.12
+  name "limite_plaza_norte"
+  translation 20 22 1.5
   boundingObject Box {
-    size 52 0.18 0.24
+    size 56 1.0 3.0
   }
-  contactMaterial "default"
+}
+Solid {
+  name "limite_plaza_sur"
+  translation 20 -22 1.5
+  boundingObject Box {
+    size 56 1.0 3.0
+  }
+}
+Solid {
+  name "limite_plaza_oeste"
+  translation -8 0 1.5
+  boundingObject Box {
+    size 1.0 46 3.0
+  }
 }
 
 # -------------------------------------------------------------
-# MALLAS VISUALES DE ENTORNO (CIENAGA, MAGDALENA)
+# MALLAS VISUALES DE LA PLAZA DEL CENTENARIO (CIENAGA, MAGDALENA)
 # -------------------------------------------------------------
 Solid {
-  name "entorno_calle_visual"
+  name "entorno_templete_visual"
   children [
     CadShape {
-      url [ "meshes/entorno_calle.obj" ]
+      url [ "meshes/entorno_templete.obj" ]
     }
   ]
 }
 
 Solid {
-  name "entorno_casas_visual"
+  name "entorno_iglesia_visual"
   children [
     CadShape {
-      url [ "meshes/entorno_casas.obj" ]
+      url [ "meshes/entorno_iglesia.obj" ]
+    }
+  ]
+}
+
+Solid {
+  name "entorno_plaza_visual"
+  children [
+    CadShape {
+      url [ "meshes/entorno_plaza.obj" ]
     }
   ]
 }
@@ -138,37 +165,20 @@ Solid {
 }
 
 Solid {
-  name "entorno_mural_visual"
+  name "entorno_casas_visual"
   children [
     CadShape {
-      url [ "meshes/entorno_mural.obj" ]
-    }
-  ]
-  boundingObject Transform {
-    translation 4.8 -8.55 1.85
-    children [
-      Box {
-        size 0.3 7.5 3.7
-      }
-    ]
-  }
-}
-
-Solid {
-  name "entorno_costa_visual"
-  children [
-    CadShape {
-      url [ "meshes/entorno_costa.obj" ]
+      url [ "meshes/entorno_casas.obj" ]
     }
   ]
 }
 
 # -------------------------------------------------------------
-# RESIDUOS Y BASURAS (OBJETOS DINAMICOS PARA RECOGER)
+# RESIDUOS Y BASURAS EN LA PLAZA (CIRCUITO DE RECOLECCION)
 # -------------------------------------------------------------
 Solid {
-  name "botella_plastica_1"
-  translation 1.55 0.22 0.035
+  name "botella_templete_1"
+  translation 11.5 2.2 0.035
   rotation 1 0 0 1.57079632679
   children [
     CadShape {
@@ -186,8 +196,8 @@ Solid {
 }
 
 Solid {
-  name "botella_plastica_2"
-  translation 2.4 -0.85 0.035
+  name "botella_templete_2"
+  translation 19.8 -3.4 0.035
   rotation 1 0 0 1.57079632679
   children [
     CadShape {
@@ -205,27 +215,8 @@ Solid {
 }
 
 Solid {
-  name "botella_plastica_3"
-  translation 3.6 1.4 0.035
-  rotation 1 0 0 1.57079632679
-  children [
-    CadShape {
-      url [ "meshes/basura_botella.obj" ]
-    }
-  ]
-  boundingObject Cylinder {
-    height 0.22
-    radius 0.035
-  }
-  physics Physics {
-    density -1
-    mass 0.08
-  }
-}
-
-Solid {
-  name "lata_1"
-  translation 1.95 -0.35 0.035
+  name "lata_templete_1"
+  translation 13.2 -4.1 0.035
   rotation 1 0 0 1.57079632679
   children [
     CadShape {
@@ -243,8 +234,8 @@ Solid {
 }
 
 Solid {
-  name "lata_2"
-  translation 4.1 0.6 0.035
+  name "lata_templete_2"
+  translation 20.5 2.8 0.035
   rotation 1 0 0 1.57079632679
   children [
     CadShape {
@@ -262,8 +253,8 @@ Solid {
 }
 
 Solid {
-  name "papel_arrugado_1"
-  translation 1.35 -0.15 0.04
+  name "papel_templete_1"
+  translation 15.2 4.8 0.04
   children [
     CadShape {
       url [ "meshes/basura_papel.obj" ]
@@ -279,8 +270,8 @@ Solid {
 }
 
 Solid {
-  name "papel_arrugado_2"
-  translation 2.8 0.9 0.04
+  name "papel_templete_2"
+  translation 16.8 -5.2 0.04
   children [
     CadShape {
       url [ "meshes/basura_papel.obj" ]
@@ -296,25 +287,80 @@ Solid {
 }
 
 Solid {
-  name "bolsa_basura_1"
-  translation -2.2 3.55 0.16
+  name "vaso_templete_1"
+  translation 12.2 -1.8 0.04
   children [
     CadShape {
-      url [ "meshes/basura_bolsa.obj" ]
+      url [ "meshes/basura_papel.obj" ]
     }
   ]
   boundingObject Sphere {
-    radius 0.22
+    radius 0.05
   }
   physics Physics {
     density -1
-    mass 0.4
+    mass 0.02
   }
 }
 
 Solid {
-  name "caja_carton_1"
-  translation 0.9 1.55 0.03
+  name "botella_sendero_iglesia"
+  translation 25.5 1.2 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_botella.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.22
+    radius 0.035
+  }
+  physics Physics {
+    density -1
+    mass 0.08
+  }
+}
+
+Solid {
+  name "lata_sendero_iglesia"
+  translation 28.8 -1.5 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_lata.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.12
+    radius 0.033
+  }
+  physics Physics {
+    density -1
+    mass 0.05
+  }
+}
+
+Solid {
+  name "papel_sendero_iglesia"
+  translation 32.2 0.8 0.04
+  children [
+    CadShape {
+      url [ "meshes/basura_papel.obj" ]
+    }
+  ]
+  boundingObject Sphere {
+    radius 0.055
+  }
+  physics Physics {
+    density -1
+    mass 0.03
+  }
+}
+
+Solid {
+  name "caja_carton_plaza"
+  translation 22.5 6.2 0.03
   children [
     CadShape {
       url [ "meshes/basura_caja.obj" ]
@@ -330,57 +376,19 @@ Solid {
 }
 
 Solid {
-  name "botella_anden"
-  translation 2.1 4.6 0.18
-  rotation 1 0 0 1.57079632679
+  name "bolsa_basura_parque"
+  translation 6.5 -9.5 0.16
   children [
     CadShape {
-      url [ "meshes/basura_botella.obj" ]
-    }
-  ]
-  boundingObject Cylinder {
-    height 0.22
-    radius 0.035
-  }
-  physics Physics {
-    density -1
-    mass 0.08
-  }
-}
-
-Solid {
-  name "lata_anden"
-  translation 5.4 4.5 0.18
-  rotation 1 0 0 1.57079632679
-  children [
-    CadShape {
-      url [ "meshes/basura_lata.obj" ]
-    }
-  ]
-  boundingObject Cylinder {
-    height 0.12
-    radius 0.033
-  }
-  physics Physics {
-    density -1
-    mass 0.05
-  }
-}
-
-Solid {
-  name "papel_anden"
-  translation 6.8 -4.5 0.18
-  children [
-    CadShape {
-      url [ "meshes/basura_papel.obj" ]
+      url [ "meshes/basura_bolsa.obj" ]
     }
   ]
   boundingObject Sphere {
-    radius 0.055
+    radius 0.22
   }
   physics Physics {
     density -1
-    mass 0.03
+    mass 0.4
   }
 }
 

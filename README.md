@@ -65,16 +65,15 @@ Al presionar la tecla **`M`**, el robot entra en su máquina de estados autónom
 
 ---
 
-## 🌴 Entorno de Ciénaga, Magdalena
+## 🏛️ Entorno Histórico: Plaza del Centenario de Ciénaga, Magdalena
 
-El mundo virtual reproduce los elementos característicos de Ciénaga:
-* Calzada principal de 48 metros con marcas viales y andenes físicos.
-* 12 casas de arquitectura colonial caribeña (6 al norte y 6 al sur).
-* Mural conmemorativo *"100 AÑOS CIÉNAGA MAGDALENA"*.
-* Palmeras y árboles tropicales de la región costera.
-* Postes de alumbrado público con iluminación cálida.
-* Sector de playa y fondo marítimo caribeño.
-* Diversos tipos de residuos interactivos (botellas plásticas, latas, papel arrugado, bolsas de basura, cajas).
+El plano de recolección de basura del robot recrea con fidelidad arquitectónica el corazón del centro histórico de Ciénaga:
+* **El Templete Neoclásico (Monumento Central)**: Podio circular de 4 niveles de escalones, anillo concéntrico de 8 columnas clásicas, entablamento, balaustrada ornamental y cúpula con pináculo.
+* **Iglesia San Juan Bautista**: Fachada colonial blanca, gran portal en arco con frontón, torre campanario de 24 metros con campanas de bronce, monumental cúpula de crucero con tambor octogonal y pérgola lateral blanca.
+* **La Plaza del Centenario**: Explanada peatonal adoquinada de 52 × 42 m con rotonda circular alrededor del Templete, jardineras concéntricas con flores caribeñas, senderos de losas, 10 bancas coloniales de hierro forjado y faroles ornamentales.
+* **Vegetación Típica**: Palmeras reales de gran porte y árboles frondosos tropicales (almendros y ficus) idénticos a los del parque central.
+* **Fondo de la Sierra Nevada de Santa Marta**: Relieve montañoso imponente que corona la perspectiva en el horizonte.
+* **Circuito de Residuos Dinámicos**: 12 puntos de basura interactivos (botellas, latas, papeles arrugados, cajas y bolsas) ubicados estratégicamente sobre los senderos peatonales y alrededor del Templete para su recolección y limpieza autónoma.
 
 ---
 
