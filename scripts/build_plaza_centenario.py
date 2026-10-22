@@ -147,7 +147,7 @@ def cone(name, radius, depth, loc, rot, col, parent=None, mat=None, keep_world=F
 # -------------------------------------------------------------
 def build_templete(center=(16.0, 0.0, 0.0)):
     cx, cy, cz = center
-    root = empty("Templete_Root", center, "ENTORNO", size=0.5)
+    root = empty("Templete_Root", (0.0, 0.0, 0.0), "ENTORNO", size=0.5)
     
     white = new_mat("MAT_Templete_Blanco", (0.94, 0.94, 0.92), 0.02, 0.28)
     marble = new_mat("MAT_Templete_Piso", (0.88, 0.86, 0.82), 0.05, 0.35)
@@ -209,59 +209,83 @@ def build_templete(center=(16.0, 0.0, 0.0)):
 # -------------------------------------------------------------
 # 2. IGLESIA SAN JUAN BAUTISTA DE CIENAGA
 # -------------------------------------------------------------
-def build_church(pos=(38.0, 4.0, 0.0)):
+def build_church(pos=(38.0, 3.0, 0.0)):
     ix, iy, iz = pos
-    root = empty("Iglesia_Root", pos, "ENTORNO", size=0.5)
+    root = empty("Iglesia_Root", (0.0, 0.0, 0.0), "ENTORNO", size=0.5)
 
-    white = new_mat("MAT_Iglesia_Blanco", (0.95, 0.95, 0.93), 0.02, 0.35)
+    white = new_mat("MAT_Iglesia_Blanco", (0.94, 0.94, 0.91), 0.02, 0.40)
+    trim_stone = new_mat("MAT_Iglesia_Moldura", (0.84, 0.81, 0.76), 0.02, 0.50)
     tiles = new_mat("MAT_Iglesia_Tejas", (0.68, 0.24, 0.14), 0.02, 0.65)
-    doors = new_mat("MAT_Iglesia_Madera", (0.28, 0.16, 0.08), 0.02, 0.55)
-    cupola_m = new_mat("MAT_Iglesia_Cupula", (0.92, 0.92, 0.90), 0.05, 0.3)
-    bronze = new_mat("MAT_Campana", (0.45, 0.35, 0.18), 0.8, 0.25)
+    doors = new_mat("MAT_Iglesia_Madera", (0.24, 0.13, 0.06), 0.02, 0.60)
+    glass_win = new_mat("MAT_Iglesia_Vidral", (0.12, 0.28, 0.45), 0.2, 0.15)
+    cupola_m = new_mat("MAT_Iglesia_Cupula", (0.88, 0.89, 0.87), 0.05, 0.32)
+    bronze = new_mat("MAT_Campana", (0.55, 0.42, 0.18), 0.75, 0.25)
+    gold_leaf = new_mat("MAT_Iglesia_Oro", (0.85, 0.72, 0.22), 0.65, 0.25)
 
-    # Nave central principal
+    # Nave central principal (Cuerpo del templo)
     cube("Iglesia_Nave_Cuerpo", (26.0, 12.0, 9.0), (ix + 13.0, iy, iz + 4.5), "ENTORNO", root, white)
     roof_nave = cube("Iglesia_Nave_Techo", (26.8, 12.8, 0.25), (ix + 13.0, iy, iz + 10.4), "ENTORNO", root, tiles)
     roof_nave.rotation_euler = Euler((0, math.radians(16), 0), "XYZ")
 
-    # Fachada Frontal (hacia la plaza)
+    # Fachada Frontal Neoclásica / Colonial (Hacia la plaza)
     cube("Iglesia_Frontispicio", (1.2, 13.0, 11.5), (ix, iy, iz + 5.75), "ENTORNO", root, white)
-    # Frontón triangular superior
-    cone("Iglesia_Fronton", 6.8, 2.8, (ix, iy, iz + 12.8), (0, math.radians(90), math.radians(90)), "ENTORNO", root, white)
-    # Gran Portón de Entrada en Arco
-    cube("Iglesia_Porton_Marco", (0.3, 3.2, 5.2), (ix - 0.2, iy, iz + 2.6), "ENTORNO", root, white)
-    cube("Iglesia_Porton_Puertas", (0.15, 2.7, 4.8), (ix - 0.22, iy, iz + 2.4), "ENTORNO", root, doors)
-    # Ventana circular (Rosetón / Óculo coral)
-    cylinder("Iglesia_Oculo", 0.95, 0.4, (ix - 0.15, iy, iz + 7.8), (0, math.radians(90), 0), "ENTORNO", root, doors, verts=24)
-    cylinder("Iglesia_Oculo_Marco", 1.25, 0.35, (ix - 0.12, iy, iz + 7.8), (0, math.radians(90), 0), "ENTORNO", root, white, verts=24)
 
-    # Gran Torre Campanario (Lateral derecha, vista frontal)
+    # Cornisas horizontales que dividen los niveles arquitectónicos
+    cube("Iglesia_Cornisa_Nivel1", (1.6, 13.6, 0.45), (ix - 0.2, iy, iz + 6.0), "ENTORNO", root, trim_stone)
+    cube("Iglesia_Cornisa_Nivel2", (1.6, 13.4, 0.45), (ix - 0.2, iy, iz + 11.2), "ENTORNO", root, trim_stone)
+
+    # 4 Pilastras decorativas clásicas en la fachada principal
+    cube("Iglesia_Pilastra_L1", (0.35, 0.70, 5.8), (ix - 0.2, iy + 2.5, iz + 3.0), "ENTORNO", root, trim_stone)
+    cube("Iglesia_Pilastra_R1", (0.35, 0.70, 5.8), (ix - 0.2, iy - 2.5, iz + 3.0), "ENTORNO", root, trim_stone)
+    cube("Iglesia_Pilastra_L2", (0.35, 0.70, 5.8), (ix - 0.2, iy + 5.8, iz + 3.0), "ENTORNO", root, trim_stone)
+    cube("Iglesia_Pilastra_R2", (0.35, 0.70, 5.8), (ix - 0.2, iy - 5.8, iz + 3.0), "ENTORNO", root, trim_stone)
+
+    # Gran Portón de Entrada en Arco con jambas de piedra tallada
+    cube("Iglesia_Porton_Marco", (0.45, 3.8, 6.0), (ix - 0.25, iy, iz + 3.0), "ENTORNO", root, trim_stone)
+    cube("Iglesia_Porton_Puertas", (0.2, 3.2, 5.2), (ix - 0.28, iy, iz + 2.6), "ENTORNO", root, doors)
+    cylinder("Iglesia_Porton_Arco", 1.6, 0.45, (ix - 0.25, iy, iz + 5.2), (0, math.radians(90), 0), "ENTORNO", root, trim_stone, verts=24)
+
+    # Ventana central de coro en nivel superior (Vitral con arco de medio punto)
+    cube("Iglesia_Ventana_Marco", (0.35, 2.4, 3.4), (ix - 0.2, iy, iz + 8.5), "ENTORNO", root, trim_stone)
+    cylinder("Iglesia_Ventana_Arco", 1.2, 0.35, (ix - 0.2, iy, iz + 10.2), (0, math.radians(90), 0), "ENTORNO", root, trim_stone, verts=20)
+    cube("Iglesia_Ventana_Vidrio", (0.1, 1.9, 2.9), (ix - 0.24, iy, iz + 8.5), "ENTORNO", root, glass_win)
+
+    # Ventanas coloniales laterales de planta baja
+    cube("Iglesia_Ventana_Lat_L", (0.2, 1.4, 2.4), (ix - 0.2, iy + 4.2, iz + 3.2), "ENTORNO", root, doors)
+    cube("Iglesia_Ventana_Lat_R", (0.2, 1.4, 2.4), (ix - 0.2, iy - 4.2, iz + 3.2), "ENTORNO", root, doors)
+
+    # Frontón triangular superior con cruz ornamental
+    cone("Iglesia_Fronton", 6.8, 2.8, (ix, iy, iz + 12.8), (0, math.radians(90), math.radians(90)), "ENTORNO", root, white)
+    cube("Iglesia_Cruz_Fachada_V", (0.14, 0.24, 1.9), (ix - 0.3, iy, iz + 13.8), "ENTORNO", root, gold_leaf)
+    cube("Iglesia_Cruz_Fachada_H", (0.14, 1.3, 0.24), (ix - 0.3, iy, iz + 14.3), "ENTORNO", root, gold_leaf)
+
+    # Gran Torre Campanario (Lateral derecha)
     tx, ty = ix + 1.2, iy - 8.2
     cube("Iglesia_Torre_Base", (5.5, 5.5, 12.0), (tx, ty, iz + 6.0), "ENTORNO", root, white)
+    cube("Iglesia_Torre_Cornisa_1", (5.8, 5.8, 0.5), (tx, ty, iz + 12.0), "ENTORNO", root, trim_stone)
     cube("Iglesia_Torre_Cuerpo2", (5.0, 5.0, 4.5), (tx, ty, iz + 14.25), "ENTORNO", root, white)
+    cube("Iglesia_Torre_Cornisa_2", (5.3, 5.3, 0.5), (tx, ty, iz + 16.5), "ENTORNO", root, trim_stone)
     cube("Iglesia_Torre_Campanario", (4.5, 4.5, 4.2), (tx, ty, iz + 18.6), "ENTORNO", root, white)
-    # Campana de bronce visible en el vano
-    cylinder("Iglesia_Campana", 0.55, 0.85, (tx - 0.2, ty, iz + 18.5), (0,0,0), "ENTORNO", root, bronze, verts=16)
-    # Remate piramidal de la torre con cruz
-    cone("Iglesia_Torre_Capitel", 2.8, 4.0, (tx, ty, iz + 22.7), (0,0,0), "ENTORNO", root, white)
-    cube("Iglesia_Torre_Cruz_V", (0.1, 0.1, 1.4), (tx, ty, iz + 25.2), "ENTORNO", root, bronze)
-    cube("Iglesia_Torre_Cruz_H", (0.1, 0.8, 0.1), (tx, ty, iz + 25.3), "ENTORNO", root, bronze)
+    cube("Iglesia_Torre_Cornisa_3", (4.8, 4.8, 0.5), (tx, ty, iz + 20.7), "ENTORNO", root, trim_stone)
 
-    # Monumental Cúpula y Crucero (Lateral izquierda / trasera, visible en la foto aérea)
+    # Vano del campanario con campana de bronce visible
+    cylinder("Iglesia_Campana", 0.55, 0.85, (tx - 0.2, ty, iz + 18.5), (0,0,0), "ENTORNO", root, bronze, verts=16)
+    cone("Iglesia_Torre_Capitel", 2.8, 4.0, (tx, ty, iz + 22.7), (0,0,0), "ENTORNO", root, white)
+    cube("Iglesia_Torre_Cruz_V", (0.14, 0.14, 1.6), (tx, ty, iz + 25.2), "ENTORNO", root, gold_leaf)
+    cube("Iglesia_Torre_Cruz_H", (0.14, 0.9, 0.14), (tx, ty, iz + 25.3), "ENTORNO", root, gold_leaf)
+
+    # Monumental Cúpula y Crucero (Lateral izquierda / trasera)
     cx, cy = ix + 18.0, iy + 6.5
     cube("Iglesia_Crucero_Muro", (9.0, 6.0, 9.5), (cx, cy, iz + 4.75), "ENTORNO", root, white)
-    # Tambor octogonal de la cúpula
     cylinder("Iglesia_Cupula_Tambor", 4.2, 3.2, (cx, cy, iz + 11.0), (0,0,0), "ENTORNO", root, white, verts=16)
-    # Media esfera de la cúpula
     c_dome = uv_sphere("Iglesia_Cupula_Esfera", 4.3, (cx, cy, iz + 12.6), "ENTORNO", root, cupola_m, segs=28)
     c_dome.scale = (1.0, 1.0, 0.95)
     select_only(c_dome)
     bpy.ops.object.transform_apply(scale=True)
-    # Linterna en la cúpula
     cylinder("Iglesia_Cupula_Linterna", 0.8, 1.6, (cx, cy, iz + 17.2), (0,0,0), "ENTORNO", root, white, verts=12)
-    cone("Iglesia_Cupula_Pinaculo", 0.5, 0.9, (cx, cy, iz + 18.4), (0,0,0), "ENTORNO", root, bronze)
+    cone("Iglesia_Cupula_Pinaculo", 0.5, 0.9, (cx, cy, iz + 18.4), (0,0,0), "ENTORNO", root, gold_leaf)
 
-    # Pérgola blanca lateral visible en la foto aérea (a la derecha de la iglesia)
+    # Pérgola blanca lateral visible en la foto aérea
     per_x, per_y = ix + 4.0, iy - 14.0
     for pi in range(5):
         cylinder(f"Pergola_Columna_{pi+1}", 0.12, 3.8, (per_x + pi * 3.5, per_y, iz + 1.9), (0,0,0), "ENTORNO", root, white, verts=10)
@@ -275,7 +299,7 @@ def build_church(pos=(38.0, 4.0, 0.0)):
 # -------------------------------------------------------------
 def build_plaza_centenario(templete_center=(16.0, 0.0, 0.0)):
     tcx, tcy, tcz = templete_center
-    root = empty("Plaza_Root", templete_center, "ENTORNO", size=0.5)
+    root = empty("Plaza_Root", (0.0, 0.0, 0.0), "ENTORNO", size=0.5)
 
     pave = new_mat("MAT_Plaza_Adoquin", (0.72, 0.70, 0.66), 0.0, 0.75)
     walkway = new_mat("MAT_Plaza_Losas", (0.80, 0.78, 0.74), 0.0, 0.65)
@@ -395,14 +419,29 @@ def build_colonial_buildings_and_mountains():
         make_house(f"Casa_Plaza_Oeste_{i+1}", (-8.5, i * 8.0 - 12.0, 0.0), (6.5, 7.2, 4.0), facades[(i+5)%len(facades)], roofs[(i+5)%len(roofs)], yaw=0)
 
     # Cadena Montañosa de la Sierra Nevada de Santa Marta (al fondo este/norte, como en la foto)
-    mountain_mat = new_mat("MAT_Sierra_Nevada", (0.24, 0.38, 0.35), 0.0, 0.9)
-    for idx, (mx, my, sc, h) in enumerate([(75.0, -10.0, (18, 30, 16), 18.0), (85.0, 18.0, (22, 35, 22), 24.0), (95.0, -2.0, (26, 40, 28), 32.0)]):
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(mx, my, h * 0.4))
-        mount = mesh_obj(f"Sierra_Nevada_Pico_{idx+1}", "ENTORNO", root)
-        mount.scale = sc
-        select_only(mount)
-        bpy.ops.object.transform_apply(scale=True)
-        assign(mount, mountain_mat)
+    mountain_rock = new_mat("MAT_Sierra_Roca", (0.26, 0.35, 0.42), 0.0, 0.88)
+    mountain_forest = new_mat("MAT_Sierra_Selva", (0.16, 0.26, 0.20), 0.0, 0.92)
+    mountain_snow = new_mat("MAT_Sierra_Nieve", (0.95, 0.97, 1.0), 0.0, 0.45)
+
+    peaks = [
+        (130.0, -42.0, 30.0, 24.0, False),
+        (142.0, -18.0, 36.0, 32.0, True),
+        (152.0, 6.0, 40.0, 38.0, True),
+        (165.0, -10.0, 44.0, 46.0, True),  # Pico Colón / Bolívar
+        (158.0, 28.0, 38.0, 36.0, True),
+        (172.0, 14.0, 42.0, 40.0, True),
+        (145.0, 50.0, 32.0, 26.0, False),
+        (125.0, 70.0, 28.0, 20.0, False),
+    ]
+    for idx, (px, py, r, h, has_snow) in enumerate(peaks):
+        bpy.ops.mesh.primitive_cone_add(vertices=7, radius1=r, radius2=r * 0.15, depth=h, location=(px, py, h * 0.5))
+        m_base = mesh_obj(f"Sierra_Base_{idx+1}", "ENTORNO", root)
+        assign(m_base, mountain_forest if h < 28.0 else mountain_rock)
+
+        if has_snow:
+            bpy.ops.mesh.primitive_cone_add(vertices=7, radius1=r * 0.35, radius2=0.4, depth=h * 0.32, location=(px, py, h * 0.82))
+            m_snow = mesh_obj(f"Sierra_Nieve_{idx+1}", "ENTORNO", root)
+            assign(m_snow, mountain_snow)
 
     return root
 
@@ -593,32 +632,50 @@ def build_robot(root_loc=(0.0, 0.0, 0.0)):
 # 8. ILUMINACION Y CAMARAS (Perspectiva Aérea idéntica a la foto)
 # -------------------------------------------------------------
 def setup_aerial_view():
+    # Cielo atmosférico caribeño
+    world = bpy.context.scene.world or bpy.data.worlds.new("World")
+    bpy.context.scene.world = world
+    world.use_nodes = True
+    bg = next((n for n in world.node_tree.nodes if n.type == "BACKGROUND"), None)
+    if bg:
+        bg.inputs["Color"].default_value = (0.52, 0.68, 0.88, 1.0)
+        bg.inputs["Strength"].default_value = 1.1
+
     # Luz Solar Caribeña Cálida de Atardecer
     sun = bpy.data.lights.new("Sol_Cienaga", "SUN")
-    sun.energy = 5.5
-    sun.color = (1.0, 0.92, 0.82)
+    sun.energy = 5.4
+    sun.color = (1.0, 0.93, 0.83)
     sun_obj = bpy.data.objects.new("Sol_Cienaga", sun)
     collection("ENTORNO").objects.link(sun_obj)
-    sun_obj.rotation_euler = Euler((math.radians(52), math.radians(12), math.radians(45)), "XYZ")
+    sun_obj.rotation_euler = Euler((math.radians(40), math.radians(22), math.radians(50)), "XYZ")
 
     # Luz de relleno ambiente
     fill = bpy.data.lights.new("Luz_Ambiente", "AREA")
-    fill.energy = 300
-    fill.size = 25
-    fill.color = (0.75, 0.85, 1.0)
+    fill.energy = 320
+    fill.size = 35
+    fill.color = (0.78, 0.88, 1.0)
     fill_obj = bpy.data.objects.new("Luz_Ambiente", fill)
     collection("ENTORNO").objects.link(fill_obj)
-    fill_obj.location = (20, 0, 25)
+    fill_obj.location = (25, 0, 30)
 
     # Cámara Aérea idéntica a la foto del dron en Instagram (Elevada, mirando el Templete con la iglesia al fondo)
     cam_data = bpy.data.cameras.new("Camara_Aerea_Plaza")
     cam = bpy.data.objects.new("Camara_Aerea_Plaza", cam_data)
     collection("CAMARAS").objects.link(cam)
-    cam.location = (-6.0, 0.0, 16.5)
-    cam.rotation_euler = Euler((math.radians(65), 0, math.radians(-90)), "XYZ")
-    cam_data.lens = 28
-    cam_data.clip_end = 300
+    cam.location = (-15.0, 0.0, 15.0)
+    cam_data.lens = 25
+    cam_data.clip_end = 800
     bpy.context.scene.camera = cam
+
+    # Objetivo de seguimiento para encuadre cinematográfico
+    bpy.ops.object.empty_add(type="PLAIN_AXES", location=(26.0, 0.0, 7.5))
+    target = bpy.context.active_object
+    target.name = "Camara_Objetivo_Aereo"
+    link_obj(target, "CAMARAS")
+    con = cam.constraints.new("TRACK_TO")
+    con.target = target
+    con.track_axis = "TRACK_NEGATIVE_Z"
+    con.up_axis = "UP_Y"
 
     # Cámara Tres Cuartos cercana al robot
     cam_robot_data = bpy.data.cameras.new("Camara_Tres_Cuartos")
