@@ -176,7 +176,62 @@ Solid {
 # -------------------------------------------------------------
 # RESIDUOS Y BASURAS EN LA PLAZA (CIRCUITO DE RECOLECCION)
 # -------------------------------------------------------------
-Solid {
+DEF RESIDUO_1 Solid {
+  name "lata_refresco_entrada"
+  translation 2.8 0.04 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_lata.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.12
+    radius 0.033
+  }
+  physics Physics {
+    density -1
+    mass 0.05
+  }
+}
+
+DEF RESIDUO_2 Solid {
+  name "botella_plastica_entrada"
+  translation 5.8 -0.15 0.035
+  rotation 1 0 0 1.57079632679
+  children [
+    CadShape {
+      url [ "meshes/basura_botella.obj" ]
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.22
+    radius 0.035
+  }
+  physics Physics {
+    density -1
+    mass 0.08
+  }
+}
+
+DEF RESIDUO_3 Solid {
+  name "papel_arrugado_entrada"
+  translation 8.6 0.12 0.04
+  children [
+    CadShape {
+      url [ "meshes/basura_papel.obj" ]
+    }
+  ]
+  boundingObject Sphere {
+    radius 0.055
+  }
+  physics Physics {
+    density -1
+    mass 0.03
+  }
+}
+
+DEF RESIDUO_4 Solid {
   name "botella_templete_1"
   translation 11.5 2.2 0.035
   rotation 1 0 0 1.57079632679
@@ -396,8 +451,9 @@ Solid {
 # ROBOT LIMPIADOR DE CIENAGA
 # -------------------------------------------------------------
 RobotLimpiadorCienaga {
-  translation 0 0 0
+  translation 0 0 0.05
   rotation 0 0 1 0
   name "Robot_Limpiador_Cienaga"
   controller "robot_limpiador_controller"
+  supervisor TRUE
 }

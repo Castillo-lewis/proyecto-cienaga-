@@ -38,10 +38,10 @@ PROTO RobotLimpiadorCienaga [
         height 480
       }
 
-      # Front Distance Sensor (IR)
+      # Front Distance Sensor (IR) - Angled downward toward ground litter
       DistanceSensor {
         translation 0.74 0 0.36
-        rotation 0 0 1 0
+        rotation 0 1 0 0.26
         name "ds_frontal"
         lookupTable [
           0 0 0
