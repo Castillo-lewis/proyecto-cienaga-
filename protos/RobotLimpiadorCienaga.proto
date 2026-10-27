@@ -23,12 +23,284 @@ PROTO RobotLimpiadorCienaga [
     supervisor IS supervisor
     synchronization IS synchronization
     children [
-      # Visual Chassis with all accessories
-      CadShape {
-        url [ "meshes/chasis.obj" ]
+      # =========================================================
+      # 1. CHASIS Y CARROCERÍA VISUAL (AMARILLO MUNICIPAL Y GRAFITO)
+      # =========================================================
+      # Carrocería Principal (Amarillo Señalización Industrial)
+      Transform {
+        translation 0 0 0.28
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.96 0.72 0.08
+              roughness 0.28
+              metalness 0.15
+            }
+            geometry Box {
+              size 1.20 0.76 0.32
+            }
+          }
+        ]
       }
 
-      # Mast Camera (Color, 640x480)
+      # Placa Base Inferior de Protección (Metal Grafito)
+      Transform {
+        translation 0 0 0.13
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.18 0.20 0.22
+              roughness 0.60
+              metalness 0.75
+            }
+            geometry Box {
+              size 1.16 0.72 0.06
+            }
+          }
+        ]
+      }
+
+      # Parachoques Delantero Reforzado (Negro Mate Industrial)
+      Transform {
+        translation 0.61 0 0.22
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.14 0.14 0.16
+              roughness 0.55
+              metalness 0.60
+            }
+            geometry Box {
+              size 0.14 0.78 0.22
+            }
+          }
+        ]
+      }
+
+      # Franja Reflectiva Delantera de Advertencia (Amarillo / Negro)
+      Transform {
+        translation 0.682 0 0.22
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.98 0.80 0.05
+              roughness 0.25
+              metalness 0.10
+            }
+            geometry Box {
+              size 0.005 0.70 0.10
+            }
+          }
+        ]
+      }
+
+      # Focos Delanteros LED de Alta Intensidad (Izquierdo y Derecho)
+      Transform {
+        translation 0.68 0.26 0.26
+        rotation 0 1 0 1.57079632679
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 1.0 1.0 0.95
+              emissiveColor 1.0 1.0 0.90
+              roughness 0.1
+              metalness 0.9
+            }
+            geometry Cylinder {
+              height 0.012
+              radius 0.038
+            }
+          }
+        ]
+      }
+      Transform {
+        translation 0.68 -0.26 0.26
+        rotation 0 1 0 1.57079632679
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 1.0 1.0 0.95
+              emissiveColor 1.0 1.0 0.90
+              roughness 0.1
+              metalness 0.9
+            }
+            geometry Cylinder {
+              height 0.012
+              radius 0.038
+            }
+          }
+        ]
+      }
+
+      # Estribos y Guardabarros Laterales
+      Transform {
+        translation 0 0.385 0.21
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.16 0.17 0.19
+              roughness 0.60
+              metalness 0.50
+            }
+            geometry Box {
+              size 1.05 0.05 0.14
+            }
+          }
+        ]
+      }
+      Transform {
+        translation 0 -0.385 0.21
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.16 0.17 0.19
+              roughness 0.60
+              metalness 0.50
+            }
+            geometry Box {
+              size 1.05 0.05 0.14
+            }
+          }
+        ]
+      }
+
+      # Tolva / Contenedor Trasero de Basura Recogida
+      Transform {
+        translation -0.18 0 0.68
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.22 0.24 0.27
+              roughness 0.40
+              metalness 0.55
+            }
+            geometry Box {
+              size 0.62 0.70 0.46
+            }
+          }
+        ]
+      }
+      # Borde Superior de Entrada de la Tolva
+      Transform {
+        translation -0.18 0 0.915
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.15 0.16 0.18
+              roughness 0.30
+              metalness 0.70
+            }
+            geometry Box {
+              size 0.64 0.72 0.03
+            }
+          }
+        ]
+      }
+      # Placa Lateral de Reciclaje Ecológico (Izquierda)
+      Transform {
+        translation -0.18 0.353 0.68
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.08 0.68 0.22
+              roughness 0.35
+            }
+            geometry Box {
+              size 0.38 0.005 0.22
+            }
+          }
+        ]
+      }
+      # Placa Lateral de Reciclaje Ecológico (Derecha)
+      Transform {
+        translation -0.18 -0.353 0.68
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.08 0.68 0.22
+              roughness 0.35
+            }
+            geometry Box {
+              size 0.38 0.005 0.22
+            }
+          }
+        ]
+      }
+
+      # =========================================================
+      # 2. MÁSTIL SENSOR, CÁMARAS Y BALIZA
+      # =========================================================
+      # Columna del Mástil
+      Transform {
+        translation -0.06 0 0.96
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.16 0.17 0.19
+              roughness 0.4
+              metalness 0.8
+            }
+            geometry Cylinder {
+              height 0.42
+              radius 0.035
+            }
+          }
+        ]
+      }
+
+      # Sensor LiDAR Giratorio
+      Transform {
+        translation -0.06 0 1.21
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.12 0.13 0.14
+              roughness 0.3
+              metalness 0.9
+            }
+            geometry Cylinder {
+              height 0.06
+              radius 0.055
+            }
+          }
+        ]
+      }
+      # Banda Láser Cian del LiDAR
+      Transform {
+        translation -0.06 0 1.21
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.0 0.85 1.0
+              emissiveColor 0.0 0.85 1.0
+              roughness 0.2
+            }
+            geometry Cylinder {
+              height 0.015
+              radius 0.058
+            }
+          }
+        ]
+      }
+
+      # Baliza Superior Ámbar Parpadeante
+      Transform {
+        translation -0.06 0 1.27
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 1.0 0.65 0.0
+              emissiveColor 1.0 0.60 0.0
+              roughness 0.15
+            }
+            geometry Sphere {
+              radius 0.032
+            }
+          }
+        ]
+      }
+
+      # Cámara de Visión Superior (Webots Camera Node)
       Camera {
         translation -0.06 0 1.15
         rotation 0 1 0 0.18
@@ -36,9 +308,64 @@ PROTO RobotLimpiadorCienaga [
         fieldOfView 1.15
         width 640
         height 480
+        children [
+          # Carcasa de la Cámara
+          Transform {
+            translation 0.02 0 0
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.12 0.13 0.14
+                  roughness 0.4
+                  metalness 0.7
+                }
+                geometry Box {
+                  size 0.09 0.14 0.075
+                }
+              }
+            ]
+          }
+          # Lentes Estéreo Ópticos
+          Transform {
+            translation 0.068 0.04 0
+            rotation 0 1 0 1.57079632679
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.05 0.15 0.35
+                  emissiveColor 0.05 0.25 0.65
+                  roughness 0.1
+                  metalness 0.9
+                }
+                geometry Cylinder {
+                  height 0.012
+                  radius 0.020
+                }
+              }
+            ]
+          }
+          Transform {
+            translation 0.068 -0.04 0
+            rotation 0 1 0 1.57079632679
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.05 0.15 0.35
+                  emissiveColor 0.05 0.25 0.65
+                  roughness 0.1
+                  metalness 0.9
+                }
+                geometry Cylinder {
+                  height 0.012
+                  radius 0.020
+                }
+              }
+            ]
+          }
+        ]
       }
 
-      # Front Distance Sensor (IR) - Angled downward toward ground litter
+      # Sensor Frontal Infrarrojo (Detección de Basura en Suelo)
       DistanceSensor {
         translation 0.74 0 0.36
         rotation 0 1 0 0.26
@@ -48,9 +375,43 @@ PROTO RobotLimpiadorCienaga [
           2 2000 0
         ]
         type "infra-red"
+        children [
+          Transform {
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.15 0.15 0.17
+                  roughness 0.4
+                  metalness 0.8
+                }
+                geometry Box {
+                  size 0.04 0.07 0.05
+                }
+              }
+            ]
+          }
+          # Lente Óptica Roja Infrarroja
+          Transform {
+            translation 0.022 0 0
+            rotation 0 1 0 1.57079632679
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.85 0.08 0.08
+                  emissiveColor 0.80 0.05 0.05
+                  roughness 0.2
+                }
+                geometry Cylinder {
+                  height 0.008
+                  radius 0.018
+                }
+              }
+            ]
+          }
+        ]
       }
 
-      # Left Ultrasonic Sensor
+      # Sensor Ultrasónico Izquierdo
       DistanceSensor {
         translation 0.73 0.12 0.30
         rotation 0 0 1 0.35
@@ -60,9 +421,27 @@ PROTO RobotLimpiadorCienaga [
           3 3000 0
         ]
         type "sonar"
+        children [
+          Transform {
+            rotation 0 1 0 1.57079632679
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.75 0.78 0.82
+                  roughness 0.3
+                  metalness 0.85
+                }
+                geometry Cylinder {
+                  height 0.02
+                  radius 0.018
+                }
+              }
+            ]
+          }
+        ]
       }
 
-      # Right Ultrasonic Sensor
+      # Sensor Ultrasónico Derecho
       DistanceSensor {
         translation 0.73 -0.12 0.30
         rotation 0 0 1 -0.35
@@ -72,6 +451,24 @@ PROTO RobotLimpiadorCienaga [
           3 3000 0
         ]
         type "sonar"
+        children [
+          Transform {
+            rotation 0 1 0 1.57079632679
+            children [
+              Shape {
+                appearance PBRAppearance {
+                  baseColor 0.75 0.78 0.82
+                  roughness 0.3
+                  metalness 0.85
+                }
+                geometry Cylinder {
+                  height 0.02
+                  radius 0.018
+                }
+              }
+            ]
+          }
+        ]
       }
 
       # IMU & GPS
@@ -82,7 +479,10 @@ PROTO RobotLimpiadorCienaga [
         name "gps"
       }
 
-      # 1. Front Left Wheel (DI)
+      # =========================================================
+      # 3. CUATRO RUEDAS MOTRICES ROBUSTAS (DI, DD, TI, TD)
+      # =========================================================
+      # 1. Rueda Delantera Izquierda (DI)
       HingeJoint {
         jointParameters HingeJointParameters {
           axis 0 1 0
@@ -103,8 +503,56 @@ PROTO RobotLimpiadorCienaga [
         endPoint Solid {
           translation 0.36 0.35 0.16
           children [
-            CadShape {
-              url [ "meshes/rueda.obj" ]
+            # Neumático de Goma Negra Labrada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.12 0.12 0.13
+                    roughness 0.85
+                    metalness 0.05
+                  }
+                  geometry Cylinder {
+                    height 0.095
+                    radius 0.16
+                  }
+                }
+              ]
+            }
+            # Llanta de Aleación Metálica Plateada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.82 0.84 0.88
+                    roughness 0.20
+                    metalness 0.90
+                  }
+                  geometry Cylinder {
+                    height 0.098
+                    radius 0.105
+                  }
+                }
+              ]
+            }
+            # Tapa Central de Buje Amarillo
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.95 0.72 0.06
+                    roughness 0.25
+                    metalness 0.70
+                  }
+                  geometry Cylinder {
+                    height 0.102
+                    radius 0.045
+                  }
+                }
+              ]
             }
           ]
           name "rueda_delantera_izquierda"
@@ -124,7 +572,7 @@ PROTO RobotLimpiadorCienaga [
         }
       }
 
-      # 2. Front Right Wheel (DD)
+      # 2. Rueda Delantera Derecha (DD)
       HingeJoint {
         jointParameters HingeJointParameters {
           axis 0 1 0
@@ -145,8 +593,56 @@ PROTO RobotLimpiadorCienaga [
         endPoint Solid {
           translation 0.36 -0.35 0.16
           children [
-            CadShape {
-              url [ "meshes/rueda.obj" ]
+            # Neumático de Goma Negra Labrada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.12 0.12 0.13
+                    roughness 0.85
+                    metalness 0.05
+                  }
+                  geometry Cylinder {
+                    height 0.095
+                    radius 0.16
+                  }
+                }
+              ]
+            }
+            # Llanta de Aleación Metálica Plateada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.82 0.84 0.88
+                    roughness 0.20
+                    metalness 0.90
+                  }
+                  geometry Cylinder {
+                    height 0.098
+                    radius 0.105
+                  }
+                }
+              ]
+            }
+            # Tapa Central de Buje Amarillo
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.95 0.72 0.06
+                    roughness 0.25
+                    metalness 0.70
+                  }
+                  geometry Cylinder {
+                    height 0.102
+                    radius 0.045
+                  }
+                }
+              ]
             }
           ]
           name "rueda_delantera_derecha"
@@ -166,7 +662,7 @@ PROTO RobotLimpiadorCienaga [
         }
       }
 
-      # 3. Rear Left Wheel (TI)
+      # 3. Rueda Trasera Izquierda (TI)
       HingeJoint {
         jointParameters HingeJointParameters {
           axis 0 1 0
@@ -187,8 +683,56 @@ PROTO RobotLimpiadorCienaga [
         endPoint Solid {
           translation -0.36 0.35 0.16
           children [
-            CadShape {
-              url [ "meshes/rueda.obj" ]
+            # Neumático de Goma Negra Labrada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.12 0.12 0.13
+                    roughness 0.85
+                    metalness 0.05
+                  }
+                  geometry Cylinder {
+                    height 0.095
+                    radius 0.16
+                  }
+                }
+              ]
+            }
+            # Llanta de Aleación Metálica Plateada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.82 0.84 0.88
+                    roughness 0.20
+                    metalness 0.90
+                  }
+                  geometry Cylinder {
+                    height 0.098
+                    radius 0.105
+                  }
+                }
+              ]
+            }
+            # Tapa Central de Buje Amarillo
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.95 0.72 0.06
+                    roughness 0.25
+                    metalness 0.70
+                  }
+                  geometry Cylinder {
+                    height 0.102
+                    radius 0.045
+                  }
+                }
+              ]
             }
           ]
           name "rueda_trasera_izquierda"
@@ -208,7 +752,7 @@ PROTO RobotLimpiadorCienaga [
         }
       }
 
-      # 4. Rear Right Wheel (TD)
+      # 4. Rueda Trasera Derecha (TD)
       HingeJoint {
         jointParameters HingeJointParameters {
           axis 0 1 0
@@ -229,8 +773,56 @@ PROTO RobotLimpiadorCienaga [
         endPoint Solid {
           translation -0.36 -0.35 0.16
           children [
-            CadShape {
-              url [ "meshes/rueda.obj" ]
+            # Neumático de Goma Negra Labrada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.12 0.12 0.13
+                    roughness 0.85
+                    metalness 0.05
+                  }
+                  geometry Cylinder {
+                    height 0.095
+                    radius 0.16
+                  }
+                }
+              ]
+            }
+            # Llanta de Aleación Metálica Plateada
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.82 0.84 0.88
+                    roughness 0.20
+                    metalness 0.90
+                  }
+                  geometry Cylinder {
+                    height 0.098
+                    radius 0.105
+                  }
+                }
+              ]
+            }
+            # Tapa Central de Buje Amarillo
+            Transform {
+              rotation 1 0 0 1.57079632679
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.95 0.72 0.06
+                    roughness 0.25
+                    metalness 0.70
+                  }
+                  geometry Cylinder {
+                    height 0.102
+                    radius 0.045
+                  }
+                }
+              ]
             }
           ]
           name "rueda_trasera_derecha"
@@ -250,7 +842,10 @@ PROTO RobotLimpiadorCienaga [
         }
       }
 
-      # Robotic Arm - Joint 1: Base Yaw
+      # =========================================================
+      # 4. BRAZO ROBÓTICO DE 4 GDL + PINZA RECOLECTORA
+      # =========================================================
+      # Articulación 1: Base Giratoria Yaw (Panorámica 360°)
       HingeJoint {
         jointParameters HingeJointParameters {
           axis 0 0 1
@@ -259,10 +854,10 @@ PROTO RobotLimpiadorCienaga [
         device [
           RotationalMotor {
             name "motor_brazo_yaw"
-            minPosition -2.5
-            maxPosition 2.5
-            maxVelocity 1.5
-            maxTorque 35
+            minPosition -3.2
+            maxPosition 3.2
+            maxVelocity 2.0
+            maxTorque 60
           }
           PositionSensor {
             name "sensor_brazo_yaw"
@@ -271,11 +866,90 @@ PROTO RobotLimpiadorCienaga [
         endPoint Solid {
           translation 0.65 0 0.34
           children [
-            CadShape {
-              url [ "meshes/brazo_base.obj" ]
+            # Base Cilindro Giratoria (Titanio Oscuro)
+            Transform {
+              translation 0 0 0.042
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.20 0.22 0.25
+                    roughness 0.30
+                    metalness 0.85
+                  }
+                  geometry Cylinder {
+                    height 0.084
+                    radius 0.080
+                  }
+                }
+              ]
+            }
+            # Anillo Corona Dentada Dorada
+            Transform {
+              translation 0 0 0.042
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.85 0.65 0.15
+                    roughness 0.20
+                    metalness 0.95
+                  }
+                  geometry Cylinder {
+                    height 0.022
+                    radius 0.088
+                  }
+                }
+              ]
+            }
+            # Anillo Indicador LED Cian
+            Transform {
+              translation 0 0 0.075
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.0 0.75 1.0
+                    emissiveColor 0.0 0.75 1.0
+                    roughness 0.2
+                  }
+                  geometry Cylinder {
+                    height 0.010
+                    radius 0.082
+                  }
+                }
+              ]
+            }
+            # Soportes Laterales de Horquilla del Hombro
+            Transform {
+              translation 0 0.052 0.075
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.95 0.72 0.06
+                    roughness 0.30
+                    metalness 0.40
+                  }
+                  geometry Box {
+                    size 0.08 0.022 0.09
+                  }
+                }
+              ]
+            }
+            Transform {
+              translation 0 -0.052 0.075
+              children [
+                Shape {
+                  appearance PBRAppearance {
+                    baseColor 0.95 0.72 0.06
+                    roughness 0.30
+                    metalness 0.40
+                  }
+                  geometry Box {
+                    size 0.08 0.022 0.09
+                  }
+                }
+              ]
             }
 
-            # Arm - Joint 2: Shoulder Pitch
+            # Articulación 2: Hombro Pitch (Elevación del Brazo Principal)
             HingeJoint {
               jointParameters HingeJointParameters {
                 axis 0 1 0
@@ -284,10 +958,10 @@ PROTO RobotLimpiadorCienaga [
               device [
                 RotationalMotor {
                   name "motor_brazo_hombro"
-                  minPosition -1.2
+                  minPosition -1.5
                   maxPosition 1.5
-                  maxVelocity 1.5
-                  maxTorque 50
+                  maxVelocity 2.0
+                  maxTorque 80
                 }
                 PositionSensor {
                   name "sensor_brazo_hombro"
@@ -296,11 +970,108 @@ PROTO RobotLimpiadorCienaga [
               endPoint Solid {
                 translation 0 0 0.102
                 children [
-                  CadShape {
-                    url [ "meshes/brazo_seg1.obj" ]
+                  # Eje Transversal del Hombro
+                  Transform {
+                    rotation 1 0 0 1.57079632679
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.25 0.27 0.30
+                          roughness 0.25
+                          metalness 0.90
+                        }
+                        geometry Cylinder {
+                          height 0.125
+                          radius 0.045
+                        }
+                      }
+                    ]
+                  }
+                  # Tapas Cromadas del Pivote
+                  Transform {
+                    rotation 1 0 0 1.57079632679
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.90 0.92 0.95
+                          roughness 0.10
+                          metalness 0.95
+                        }
+                        geometry Cylinder {
+                          height 0.130
+                          radius 0.026
+                        }
+                      }
+                    ]
+                  }
+                  # Brazo Principal / Segmento 1 (Longitud 0.42m a lo largo de +X)
+                  Transform {
+                    translation 0.21 0 0
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.18 0.20 0.23
+                          roughness 0.35
+                          metalness 0.75
+                        }
+                        geometry Box {
+                          size 0.42 0.084 0.084
+                        }
+                      }
+                    ]
+                  }
+                  # Panel Lateral Amarillo Izquierdo de Seguridad
+                  Transform {
+                    translation 0.21 0.044 0
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.96 0.72 0.08
+                          roughness 0.30
+                          metalness 0.15
+                        }
+                        geometry Box {
+                          size 0.36 0.005 0.076
+                        }
+                      }
+                    ]
+                  }
+                  # Panel Lateral Amarillo Derecho de Seguridad
+                  Transform {
+                    translation 0.21 -0.044 0
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.96 0.72 0.08
+                          roughness 0.30
+                          metalness 0.15
+                        }
+                        geometry Box {
+                          size 0.36 0.005 0.076
+                        }
+                      }
+                    ]
+                  }
+                  # Cilindro Cromado de Asistencia Hidráulica
+                  Transform {
+                    translation 0.20 0 0.052
+                    rotation 0 1 0 1.57079632679
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.88 0.90 0.94
+                          roughness 0.15
+                          metalness 0.95
+                        }
+                        geometry Cylinder {
+                          height 0.32
+                          radius 0.014
+                        }
+                      }
+                    ]
                   }
 
-                  # Arm - Joint 3: Elbow Pitch
+                  # Articulación 3: Codo Pitch (Antebrazo Articulado)
                   HingeJoint {
                     jointParameters HingeJointParameters {
                       axis 0 1 0
@@ -309,10 +1080,10 @@ PROTO RobotLimpiadorCienaga [
                     device [
                       RotationalMotor {
                         name "motor_brazo_codo"
-                        minPosition -2.2
-                        maxPosition 1.6
-                        maxVelocity 1.8
-                        maxTorque 40
+                        minPosition -2.5
+                        maxPosition 2.5
+                        maxVelocity 2.2
+                        maxTorque 60
                       }
                       PositionSensor {
                         name "sensor_brazo_codo"
@@ -321,41 +1092,179 @@ PROTO RobotLimpiadorCienaga [
                     endPoint Solid {
                       translation 0.42 0 0
                       children [
-                        CadShape {
-                          url [ "meshes/brazo_seg2.obj" ]
+                        # Eje Transversal del Codo
+                        Transform {
+                          rotation 1 0 0 1.57079632679
+                          children [
+                            Shape {
+                              appearance PBRAppearance {
+                                baseColor 0.25 0.27 0.30
+                                roughness 0.25
+                                metalness 0.90
+                              }
+                              geometry Cylinder {
+                                height 0.105
+                                radius 0.038
+                              }
+                            }
+                          ]
+                        }
+                        # Antebrazo / Segmento 2 (Longitud 0.38m a lo largo de +X)
+                        Transform {
+                          translation 0.19 0 0
+                          children [
+                            Shape {
+                              appearance PBRAppearance {
+                                baseColor 0.20 0.22 0.25
+                                roughness 0.35
+                                metalness 0.75
+                              }
+                              geometry Box {
+                                size 0.38 0.074 0.068
+                              }
+                            }
+                          ]
+                        }
+                        # Franja Amarilla Superior
+                        Transform {
+                          translation 0.19 0 0.036
+                          children [
+                            Shape {
+                              appearance PBRAppearance {
+                                baseColor 0.96 0.72 0.08
+                                roughness 0.28
+                                metalness 0.15
+                              }
+                              geometry Box {
+                                size 0.32 0.066 0.005
+                              }
+                            }
+                          ]
+                        }
+                        # Guía de Cableado Inferior
+                        Transform {
+                          translation 0.19 0 -0.038
+                          rotation 0 1 0 1.57079632679
+                          children [
+                            Shape {
+                              appearance PBRAppearance {
+                                baseColor 0.10 0.10 0.12
+                                roughness 0.70
+                              }
+                              geometry Cylinder {
+                                height 0.30
+                                radius 0.010
+                              }
+                            }
+                          ]
                         }
 
-                        # Wrist & Gripper
+                        # Muñeca y Mecanismo Base de la Pinza
                         Solid {
                           translation 0.38 0 0
                           children [
-                            CadShape {
-                              url [ "meshes/gripper_base.obj" ]
+                            # Bloque Central de la Muñeca (Grafito)
+                            Transform {
+                              translation 0.02 0 0
+                              children [
+                                Shape {
+                                  appearance PBRAppearance {
+                                    baseColor 0.18 0.20 0.23
+                                    roughness 0.30
+                                    metalness 0.80
+                                  }
+                                  geometry Box {
+                                    size 0.05 0.066 0.064
+                                  }
+                                }
+                              ]
+                            }
+                            # Diodo Láser de Apuntado Frontal Rojo
+                            Transform {
+                              translation 0.046 0 0
+                              rotation 0 1 0 1.57079632679
+                              children [
+                                Shape {
+                                  appearance PBRAppearance {
+                                    baseColor 0.90 0.05 0.05
+                                    emissiveColor 1.0 0.05 0.05
+                                    roughness 0.2
+                                  }
+                                  geometry Cylinder {
+                                    height 0.008
+                                    radius 0.010
+                                  }
+                                }
+                              ]
                             }
 
-                            # Left Gripper Finger
+                            # Articulación 4a: Dedo / Garra Izquierda de la Pinza
                             HingeJoint {
                               jointParameters HingeJointParameters {
                                 axis 0 0 1
-                                anchor 0.04 0.027 0
+                                anchor 0.04 0.028 0
                               }
                               device [
                                 RotationalMotor {
                                   name "motor_pinza_izq"
-                                  minPosition -0.3
-                                  maxPosition 0.3
-                                  maxVelocity 1.0
-                                  maxTorque 15
+                                  minPosition -0.4
+                                  maxPosition 0.4
+                                  maxVelocity 1.5
+                                  maxTorque 25
                                 }
                                 PositionSensor {
                                   name "sensor_pinza_izq"
                                 }
                               ]
                               endPoint Solid {
-                                translation 0.04 0.027 0
+                                translation 0.04 0.028 0
                                 children [
-                                  CadShape {
-                                    url [ "meshes/gripper_finger_left.obj" ]
+                                  # Brazo Principal de la Pinza (Naranja / Amarillo Alta Visibilidad)
+                                  Transform {
+                                    translation 0.075 0 0
+                                    children [
+                                      Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.98 0.55 0.05
+                                          roughness 0.35
+                                          metalness 0.20
+                                        }
+                                        geometry Box {
+                                          size 0.15 0.024 0.048
+                                        }
+                                      }
+                                    ]
+                                  }
+                                  # Almohadilla Antideslizante Interior (Goma Negra de Agarre)
+                                  Transform {
+                                    translation 0.075 -0.012 0
+                                    children [
+                                      Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.10 0.10 0.11
+                                          roughness 0.95
+                                          metalness 0.05
+                                        }
+                                        geometry Box {
+                                          size 0.13 0.006 0.042
+                                        }
+                                      }
+                                    ]
+                                  }
+                                  # Punta Curvada de Retención
+                                  Transform {
+                                    translation 0.150 -0.008 0
+                                    children [
+                                      Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.98 0.55 0.05
+                                          roughness 0.30
+                                        }
+                                        geometry Box {
+                                          size 0.025 0.016 0.044
+                                        }
+                                      }
+                                    ]
                                   }
                                 ]
                                 name "pinza_izquierda"
@@ -372,29 +1281,73 @@ PROTO RobotLimpiadorCienaga [
                               }
                             }
 
-                            # Right Gripper Finger
+                            # Articulación 4b: Dedo / Garra Derecha de la Pinza
                             HingeJoint {
                               jointParameters HingeJointParameters {
                                 axis 0 0 1
-                                anchor 0.04 -0.027 0
+                                anchor 0.04 -0.028 0
                               }
                               device [
                                 RotationalMotor {
                                   name "motor_pinza_der"
-                                  minPosition -0.3
-                                  maxPosition 0.3
-                                  maxVelocity 1.0
-                                  maxTorque 15
+                                  minPosition -0.4
+                                  maxPosition 0.4
+                                  maxVelocity 1.5
+                                  maxTorque 25
                                 }
                                 PositionSensor {
                                   name "sensor_pinza_der"
                                 }
                               ]
                               endPoint Solid {
-                                translation 0.04 -0.027 0
+                                translation 0.04 -0.028 0
                                 children [
-                                  CadShape {
-                                    url [ "meshes/gripper_finger_right.obj" ]
+                                  # Brazo Principal de la Pinza (Naranja / Amarillo Alta Visibilidad)
+                                  Transform {
+                                    translation 0.075 0 0
+                                    children [
+                                      Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.98 0.55 0.05
+                                          roughness 0.35
+                                          metalness 0.20
+                                        }
+                                        geometry Box {
+                                          size 0.15 0.024 0.048
+                                        }
+                                      }
+                                    ]
+                                  }
+                                  # Almohadilla Antideslizante Interior (Goma Negra de Agarre)
+                                  Transform {
+                                    translation 0.075 0.012 0
+                                    children [
+                                      Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.10 0.10 0.11
+                                          roughness 0.95
+                                          metalness 0.05
+                                        }
+                                        geometry Box {
+                                          size 0.13 0.006 0.042
+                                        }
+                                      }
+                                    ]
+                                  }
+                                  # Punta Curvada de Retención
+                                  Transform {
+                                    translation 0.150 0.008 0
+                                    children [
+                                      Shape {
+                                        appearance PBRAppearance {
+                                          baseColor 0.98 0.55 0.05
+                                          roughness 0.30
+                                        }
+                                        geometry Box {
+                                          size 0.025 0.016 0.044
+                                        }
+                                      }
+                                    ]
                                   }
                                 ]
                                 name "pinza_derecha"
@@ -412,10 +1365,15 @@ PROTO RobotLimpiadorCienaga [
                             }
                           ]
                           name "muneca_pinza"
-                          boundingObject Box { size 0.05 0.06 0.06 }
+                          boundingObject Transform {
+                            translation 0.02 0 0
+                            children [
+                              Box { size 0.05 0.066 0.064 }
+                            ]
+                          }
                           physics Physics {
                             density -1
-                            mass 0.3
+                            mass 0.4
                           }
                         }
                       ]
@@ -423,12 +1381,12 @@ PROTO RobotLimpiadorCienaga [
                       boundingObject Transform {
                         translation 0.19 0 0
                         children [
-                          Box { size 0.38 0.075 0.07 }
+                          Box { size 0.38 0.075 0.070 }
                         ]
                       }
                       physics Physics {
                         density -1
-                        mass 1.2
+                        mass 1.5
                       }
                     }
                   }
@@ -442,19 +1400,24 @@ PROTO RobotLimpiadorCienaga [
                 }
                 physics Physics {
                   density -1
-                  mass 1.8
+                  mass 2.2
                 }
               }
             }
           ]
           name "brazo_base"
-          boundingObject Cylinder {
-            height 0.12
-            radius 0.055
+          boundingObject Transform {
+            translation 0 0 0.042
+            children [
+              Cylinder {
+                height 0.10
+                radius 0.085
+              }
+            ]
           }
           physics Physics {
             density -1
-            mass 2.0
+            mass 2.5
           }
         }
       }

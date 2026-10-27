@@ -8,7 +8,7 @@ El robot recorre sistemáticamente TODOS los sectores de la plaza:
   - Paseo Central Este (Hacia la Iglesia San Juan Bautista)
   - Rotonda y Jardineras Sur
 Mientras recorre la plaza, detecta y recolecta residuos en su camino,
-depositándolos en su tolva trasera con su brazo de 4 GDL.
+depositándolos en su tolva trasera con su brazo robótico de 4 GDL y pinzas visibles.
 """
 
 import sys
@@ -22,6 +22,30 @@ def normalize_angle(angle):
         angle += 2.0 * math.pi
     return angle
 
+def compute_gripper_world_pos(rx, ry, ryaw, yaw_angle, sh_angle, el_angle):
+    """
+    Calcula la posición 3D exacta en coordenadas globales del extremo de la pinza,
+    utilizando cinemática directa del brazo de 4 GDL montado sobre el chasis.
+    """
+    a1 = sh_angle
+    a2 = sh_angle + el_angle
+    # Alcance radial hacia adelante desde el pivote del hombro:
+    R = 0.42 * math.cos(a1) + 0.52 * math.cos(a2)
+    # Altura vertical respecto a la base del robot:
+    Z_local = 0.442 - 0.42 * math.sin(a1) - 0.52 * math.sin(a2)
+
+    # Coordenadas en el marco local del robot (pivote de yaw en X=0.65):
+    X_robot = 0.65 + R * math.cos(yaw_angle)
+    Y_robot = 0.00 + R * math.sin(yaw_angle)
+
+    # Transformación al sistema de coordenadas del mundo (ENU):
+    c = math.cos(ryaw)
+    s = math.sin(ryaw)
+    X_world = rx + X_robot * c - Y_robot * s
+    Y_world = ry + X_robot * s + Y_robot * c
+    Z_world = max(0.03, 0.05 + Z_local)
+    return [X_world, Y_world, Z_world]
+
 def main():
     supervisor = Supervisor()
     time_step = int(supervisor.getBasicTimeStep())
@@ -31,6 +55,7 @@ def main():
     print("=" * 72, flush=True)
     print(" 🤖 ROBOT LIMPIADOR URBANO - CIRCUITO PLAZA DEL CENTENARIO", flush=True)
     print(" Simulación Webots R2025a | Recorrido Completo y Recolección Activa", flush=True)
+    print(" Brazo de 4 GDL y Pinzas Visibles con Cinemática Directa 3D", flush=True)
     print("=" * 72, flush=True)
 
     # ---------------------------------------------------------
@@ -71,10 +96,11 @@ def main():
         if m:
             arm_motors[name] = m
 
+    # Posición inicial de patrulla (plegado, seguro y visible)
     arm_targets = {
         "motor_brazo_yaw": 0.0,
-        "motor_brazo_hombro": 0.35,
-        "motor_brazo_codo": -0.65,
+        "motor_brazo_hombro": -0.45,
+        "motor_brazo_codo": 1.35,
         "motor_pinza_izq": 0.0,
         "motor_pinza_der": 0.0,
     }
@@ -172,8 +198,8 @@ def main():
     current_target_trash = None
 
     CRUISE_SPEED = 3.6
-    TURN_SPEED = 2.6
-    MAX_SPEED = 5.2
+    TURN_SPEED = 2.4
+    MAX_SPEED = 5.0
 
     step_count = 0
     last_key_press = -1
@@ -199,7 +225,7 @@ def main():
         supervisor.setLabel(3, "[M] Alternar Manual/Autonomo  |  [Flechas] Conducir  |  [C] Recoger  |  [ESPACIO] Frenar", 0.02, 0.95, 0.036, 0xCCCCCC, 0.0, "Lucida Console")
 
     # ---------------------------------------------------------
-    # 7. BUCLE PRINCIPAL
+    # 7. BUCLE PRINCIPAL DE LA SIMULACIÓN
     # ---------------------------------------------------------
     while supervisor.step(time_step) != -1:
         step_count += 1
@@ -246,34 +272,46 @@ def main():
 
             # Control manual del brazo
             if key == ord('W'):
-                arm_targets["motor_brazo_hombro"] = min(1.3, arm_targets["motor_brazo_hombro"] + 0.03)
+                arm_targets["motor_brazo_hombro"] = max(-1.4, arm_targets["motor_brazo_hombro"] - 0.03)
             elif key == ord('S'):
-                arm_targets["motor_brazo_hombro"] = max(-1.0, arm_targets["motor_brazo_hombro"] - 0.03)
+                arm_targets["motor_brazo_hombro"] = min(1.4, arm_targets["motor_brazo_hombro"] + 0.03)
             if key == ord('A'):
-                arm_targets["motor_brazo_yaw"] = min(2.4, arm_targets["motor_brazo_yaw"] + 0.04)
+                arm_targets["motor_brazo_yaw"] = min(3.14, arm_targets["motor_brazo_yaw"] + 0.04)
             elif key == ord('D'):
-                arm_targets["motor_brazo_yaw"] = max(-2.4, arm_targets["motor_brazo_yaw"] - 0.04)
+                arm_targets["motor_brazo_yaw"] = max(-3.14, arm_targets["motor_brazo_yaw"] - 0.04)
             if key == ord('E'):
-                arm_targets["motor_brazo_codo"] = min(1.2, arm_targets["motor_brazo_codo"] + 0.04)
+                arm_targets["motor_brazo_codo"] = min(2.4, arm_targets["motor_brazo_codo"] + 0.04)
             elif key == ord('Q'):
-                arm_targets["motor_brazo_codo"] = max(-2.0, arm_targets["motor_brazo_codo"] - 0.04)
+                arm_targets["motor_brazo_codo"] = max(-2.4, arm_targets["motor_brazo_codo"] - 0.04)
             if key == ord('G'):
-                arm_targets["motor_pinza_izq"] = 0.28
-                arm_targets["motor_pinza_der"] = -0.28
+                arm_targets["motor_pinza_izq"] = 0.32
+                arm_targets["motor_pinza_der"] = -0.32
             elif key == ord('H'):
-                arm_targets["motor_pinza_izq"] = -0.08
-                arm_targets["motor_pinza_der"] = 0.08
+                arm_targets["motor_pinza_izq"] = -0.06
+                arm_targets["motor_pinza_der"] = 0.06
             if key == ord('R'):
                 arm_targets["motor_brazo_yaw"] = 0.0
-                arm_targets["motor_brazo_hombro"] = 0.35
-                arm_targets["motor_brazo_codo"] = -0.65
+                arm_targets["motor_brazo_hombro"] = -0.45
+                arm_targets["motor_brazo_codo"] = 1.35
                 arm_targets["motor_pinza_izq"] = 0.0
                 arm_targets["motor_pinza_der"] = 0.0
             if key == ord('C'):
-                mode = "AUTONOMO"
-                auto_state = "APUNTAR_PINZA"
-                auto_timer = 0
-                set_drive_velocities(0.0, 0.0)
+                # Iniciar gesto automático en modo manual sobre el residuo más cercano
+                nearby_trash = None
+                closest_d = 4.0
+                for t in trash_items:
+                    if not t["collected"]:
+                        t_pos = t["node"].getPosition()
+                        d = math.hypot(t_pos[0] - rx, t_pos[1] - ry)
+                        if d < closest_d:
+                            closest_d = d
+                            nearby_trash = t
+                if nearby_trash:
+                    current_target_trash = nearby_trash
+                    mode = "AUTONOMO"
+                    auto_state = "APUNTAR_PINZA"
+                    auto_timer = 0
+                    set_drive_velocities(0.0, 0.0)
 
             apply_arm_positions()
             if step_count % 30 == 0:
@@ -283,10 +321,10 @@ def main():
         # MODO AUTÓNOMO: RECORRIDO + BÚSQUEDA Y RECOLECCIÓN
         # =====================================================
         else:
-            # 1. Verificar si hay un residuo en el radio de intercepción (~3.2 m)
+            # 1. Detectar si hay un residuo en el radio de intercepción (~3.5 m)
             if auto_state == "PATRULLA_CIRCUITO":
                 nearby_trash = None
-                closest_d = 3.2
+                closest_d = 3.5
 
                 for t in trash_items:
                     if not t["collected"]:
@@ -346,95 +384,152 @@ def main():
                 target_yaw = math.atan2(dy, dx)
                 yaw_error = normalize_angle(target_yaw - ryaw)
 
-                # Distancia óptima para agarre (~0.68m de la base del robot)
-                if dist_t <= 0.68 or (dist_t <= 1.0 and val_front > 350.0):
+                # Distancia óptima para alcance del brazo (entre 1.35m y 1.50m del centro del robot)
+                if dist_t <= 1.45 or (dist_t <= 1.65 and val_front > 400.0):
                     set_drive_velocities(0.0, 0.0)
                     auto_state = "APUNTAR_PINZA"
                     auto_timer = 0
                     print(f"[AUTONOMO] Frente al residuo {current_target_trash['name']}. Iniciando recolección...", flush=True)
                 else:
-                    kp = 3.4
+                    kp = 3.2
                     turn = max(-TURN_SPEED, min(TURN_SPEED, kp * yaw_error))
-                    if abs(yaw_error) > 0.6:
+                    if abs(yaw_error) > 0.5:
                         set_drive_velocities(-turn * 0.8, turn * 0.8)
                     else:
-                        spd = 2.6 if dist_t < 1.6 else CRUISE_SPEED
+                        spd = 2.4 if dist_t < 2.0 else CRUISE_SPEED
                         set_drive_velocities(spd - turn, spd + turn)
 
                 if step_count % 25 == 0:
                     update_hud(f"Aproximandose a {current_target_trash['name']} ({dist_t:.1f} m)")
 
             # -------------------------------------------------
-            # ESTADO C: SECUENCIA CINEMÁTICA DE AGARRE
+            # ESTADO C: SECUENCIA CINEMÁTICA DEL GESTO DE RECOLECCIÓN
             # -------------------------------------------------
+            # Paso 1: Orientar el brazo y abrir pinzas
             elif auto_state == "APUNTAR_PINZA":
                 set_drive_velocities(0.0, 0.0)
-                t_pos = current_target_trash["node"].getPosition() if current_target_trash else (rx + 0.5, ry, 0)
+                t_pos = current_target_trash["node"].getPosition() if current_target_trash else (rx + 1.4, ry, 0.04)
                 dx = t_pos[0] - rx
                 dy = t_pos[1] - ry
                 target_yaw = math.atan2(dy, dx)
                 rel_yaw = normalize_angle(target_yaw - ryaw)
 
-                arm_targets["motor_brazo_yaw"] = max(-1.2, min(1.2, rel_yaw))
-                arm_targets["motor_pinza_izq"] = 0.28
-                arm_targets["motor_pinza_der"] = -0.28
+                # Orientar la torreta hacia el residuo y abrir pinzas
+                arm_targets["motor_brazo_yaw"] = max(-1.8, min(1.8, rel_yaw))
+                arm_targets["motor_brazo_hombro"] = -0.10
+                arm_targets["motor_brazo_codo"] = 0.45
+                arm_targets["motor_pinza_izq"] = 0.32
+                arm_targets["motor_pinza_der"] = -0.32
                 apply_arm_positions()
+
                 auto_timer += 1
-                if auto_timer > 22:
+                if auto_timer % 15 == 0:
+                    update_hud(f"Apuntando pinzas a {current_target_trash['name']}...")
+                if auto_timer > 35:
                     auto_state = "BAJAR_BRAZO"
                     auto_timer = 0
 
+            # Paso 2: Descender el brazo hacia el residuo en el suelo
             elif auto_state == "BAJAR_BRAZO":
-                arm_targets["motor_brazo_hombro"] = -0.58
-                arm_targets["motor_brazo_codo"] = 0.98
+                set_drive_velocities(0.0, 0.0)
+                # Extender hacia el suelo (Z~0.04m, X~1.45m)
+                arm_targets["motor_brazo_hombro"] = 0.28
+                arm_targets["motor_brazo_codo"] = 0.28
+                arm_targets["motor_pinza_izq"] = 0.32
+                arm_targets["motor_pinza_der"] = -0.32
                 apply_arm_positions()
+
                 auto_timer += 1
-                if auto_timer > 36:
+                if auto_timer % 15 == 0:
+                    update_hud("Descendiendo garra hacia el residuo en suelo...")
+                if auto_timer > 55:
                     auto_state = "CERRAR_PINZA"
                     auto_timer = 0
 
+            # Paso 3: Cerrar las pinzas sujetando firmemente el residuo
             elif auto_state == "CERRAR_PINZA":
-                arm_targets["motor_pinza_izq"] = -0.08
-                arm_targets["motor_pinza_der"] = 0.08
+                set_drive_velocities(0.0, 0.0)
+                arm_targets["motor_pinza_izq"] = -0.06
+                arm_targets["motor_pinza_der"] = 0.06
                 apply_arm_positions()
+
                 auto_timer += 1
-                if auto_timer > 28:
+                if auto_timer % 15 == 0:
+                    update_hud("Sujetando firmemente con pinzas de goma...")
+                if auto_timer > 40:
                     auto_state = "LEVANTAR_RESIDUO"
                     auto_timer = 0
 
+            # Paso 4: Levantar el residuo hacia arriba con el brazo
             elif auto_state == "LEVANTAR_RESIDUO":
-                arm_targets["motor_brazo_hombro"] = 0.92
-                arm_targets["motor_brazo_codo"] = -0.85
+                set_drive_velocities(0.0, 0.0)
+                # Elevación del brazo principal
+                arm_targets["motor_brazo_hombro"] = -0.75
+                arm_targets["motor_brazo_codo"] = -0.40
                 apply_arm_positions()
 
-                if auto_timer > 10 and current_target_trash:
+                # El residuo sigue a la pinza en 3D
+                if current_target_trash:
+                    # Progreso de elevación 0.0 -> 1.0
+                    alpha = min(1.0, auto_timer / 45.0)
+                    grip_pos = compute_gripper_world_pos(
+                        rx, ry, ryaw,
+                        arm_targets["motor_brazo_yaw"],
+                        0.28 + (-0.75 - 0.28) * alpha,
+                        0.28 + (-0.40 - 0.28) * alpha
+                    )
                     tf = current_target_trash["node"].getField("translation")
-                    cp = tf.getSFVec3f()
-                    tf.setSFVec3f([cp[0], cp[1], 0.35 + (auto_timer - 10) * 0.025])
+                    tf.setSFVec3f(grip_pos)
 
                 auto_timer += 1
-                if auto_timer > 40:
+                if auto_timer % 15 == 0:
+                    update_hud("Elevando residuo con brazo robotico...")
+                if auto_timer > 55:
                     auto_state = "GIRAR_HACIA_TOLVA"
                     auto_timer = 0
 
+            # Paso 5: Girar 180° hacia la tolva trasera
             elif auto_state == "GIRAR_HACIA_TOLVA":
-                arm_targets["motor_brazo_yaw"] = 2.45
+                set_drive_velocities(0.0, 0.0)
+                arm_targets["motor_brazo_yaw"] = 3.14159
+                arm_targets["motor_brazo_hombro"] = -0.80
+                arm_targets["motor_brazo_codo"] = 0.50
                 apply_arm_positions()
+
+                # El residuo sigue la trayectoria de giro del extremo de la pinza
+                if current_target_trash:
+                    start_yaw = 0.0
+                    alpha = min(1.0, auto_timer / 60.0)
+                    cur_yaw = start_yaw + (3.14159 - start_yaw) * alpha
+                    grip_pos = compute_gripper_world_pos(
+                        rx, ry, ryaw,
+                        cur_yaw,
+                        -0.80,
+                        0.50
+                    )
+                    tf = current_target_trash["node"].getField("translation")
+                    tf.setSFVec3f(grip_pos)
+
                 auto_timer += 1
-                if auto_timer > 44:
+                if auto_timer % 15 == 0:
+                    update_hud("Girando brazo 180 hacia la tolva trasera...")
+                if auto_timer > 70:
                     auto_state = "DEPOSITAR_EN_TOLVA"
                     auto_timer = 0
 
+            # Paso 6: Abrir pinzas y soltar residuo dentro de la tolva
             elif auto_state == "DEPOSITAR_EN_TOLVA":
-                arm_targets["motor_pinza_izq"] = 0.28
-                arm_targets["motor_pinza_der"] = -0.28
+                set_drive_velocities(0.0, 0.0)
+                arm_targets["motor_pinza_izq"] = 0.32
+                arm_targets["motor_pinza_der"] = -0.32
                 apply_arm_positions()
                 auto_timer += 1
 
-                if auto_timer == 18 and current_target_trash:
-                    slot_x = -0.22 - (trash_collected % 3) * 0.12
-                    slot_y = -0.15 + ((trash_collected // 3) % 3) * 0.15
-                    slot_z = 0.65 + (trash_collected // 6) * 0.08
+                # Soltar residuo en ranura fija dentro del contenedor trasero
+                if auto_timer == 15 and current_target_trash:
+                    slot_x = -0.18 - (trash_collected % 3) * 0.09
+                    slot_y = -0.12 + ((trash_collected // 3) % 3) * 0.12
+                    slot_z = 0.62 + (trash_collected // 6) * 0.08
 
                     c_yaw = math.cos(ryaw)
                     s_yaw = math.sin(ryaw)
@@ -446,21 +541,27 @@ def main():
                     tf.setSFVec3f([wx, wy, wz])
                     current_target_trash["collected"] = True
                     trash_collected += 1
-                    print(f"✨ [RECOLECCIÓN EXITOSA] '{current_target_trash['name']}' depositado en tolva! Total: {trash_collected}/{total_trash}", flush=True)
+                    print(f"✨ [RECOLECCIÓN EXITOSA] '{current_target_trash['name']}' depositado en tolva! Total recogidos: {trash_collected}/{total_trash}", flush=True)
 
-                if auto_timer > 34:
+                if auto_timer % 15 == 0:
+                    update_hud("Depositando residuo en la tolva...")
+                if auto_timer > 45:
                     auto_state = "REGRESAR_POSE_PATRULLA"
                     auto_timer = 0
 
+            # Paso 7: Retornar brazo a posición de patrulla y reanudar recorrido
             elif auto_state == "REGRESAR_POSE_PATRULLA":
                 arm_targets["motor_brazo_yaw"] = 0.0
-                arm_targets["motor_brazo_hombro"] = 0.35
-                arm_targets["motor_brazo_codo"] = -0.65
+                arm_targets["motor_brazo_hombro"] = -0.45
+                arm_targets["motor_brazo_codo"] = 1.35
                 arm_targets["motor_pinza_izq"] = 0.0
                 arm_targets["motor_pinza_der"] = 0.0
                 apply_arm_positions()
+
                 auto_timer += 1
-                if auto_timer > 36:
+                if auto_timer % 15 == 0:
+                    update_hud("Retornando brazo a posicion de marcha...")
+                if auto_timer > 45:
                     current_target_trash = None
                     auto_state = "PATRULLA_CIRCUITO"
                     auto_timer = 0
