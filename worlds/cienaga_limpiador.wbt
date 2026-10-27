@@ -32,8 +32,8 @@ WorldInfo {
 }
 
 Viewpoint {
-  orientation 0.28 0.25 0.93 2.15
-  position -4.5 0 14.5
+  orientation 0.6495 -0.4398 -0.6203 1.6583
+  position 1.2 -2.2 2.6
   near 0.1
   far 500
   follow "Robot_Limpiador_Cienaga"
@@ -178,7 +178,7 @@ Solid {
 # -------------------------------------------------------------
 DEF RESIDUO_1 Solid {
   name "lata_refresco_entrada"
-  translation 2.8 0.04 0.035
+  translation 7.5 0.05 0.035
   rotation 1 0 0 1.57079632679
   children [
     CadShape {
@@ -197,7 +197,7 @@ DEF RESIDUO_1 Solid {
 
 DEF RESIDUO_2 Solid {
   name "botella_plastica_entrada"
-  translation 5.8 -0.15 0.035
+  translation 9.8 -0.2 0.035
   rotation 1 0 0 1.57079632679
   children [
     CadShape {
@@ -216,7 +216,7 @@ DEF RESIDUO_2 Solid {
 
 DEF RESIDUO_3 Solid {
   name "papel_arrugado_entrada"
-  translation 8.6 0.12 0.04
+  translation 12.8 4.2 0.04
   children [
     CadShape {
       url [ "meshes/basura_papel.obj" ]
@@ -451,7 +451,7 @@ Solid {
 # ROBOT LIMPIADOR DE CIENAGA
 # -------------------------------------------------------------
 RobotLimpiadorCienaga {
-  translation 0 0 0.05
+  translation 5.0 0 0.05
   rotation 0 0 1 0
   name "Robot_Limpiador_Cienaga"
   controller "robot_limpiador_controller"
